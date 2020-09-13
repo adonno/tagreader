@@ -1,152 +1,259 @@
 substitutions:
-    devicename: tagreader
-    upper_devicename: TagReader
-  
-  wifi:
-    reboot_timeout: 10min
-    networks:
-    - ssid: 'IoT2'
-      password: !secret wifi_password
-  
-  logger:
-    baud_rate: 115200
-  
-  api:
-  
-  ota:
-  
-  esphome:
-    name: "$devicename"
-    platform: ESP8266
-    esp8266_restore_from_flash: true
-    board: d1_mini
-    on_boot:
-      priority: -10
-      then:
+  devicename: tagreader
+  upper_devicename: TagReader
+
+
+web_server:
+  port: 80
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: d1_mini
+  includes:
+  # on_boot:
+  #   priority: -10
+  #   then:
+  #     - output.turn_off:
+  #         id: onboard_led
+  #     - light.turn_on:
+  #         id: activity_led
+  #         brightness: 100%
+  #         red: 100%
+  #         blue: 100%
+  #         green: 100%
+  #     - delay: 200ms
+  #     - light.turn_off:
+  #         id: activity_led
+  #     - delay: 150ms
+  #     - light.turn_on:
+  #         id: activity_led
+  #         brightness: 100%
+  #         red: 100%
+  #         blue: 100%
+  #         green: 100%
+  #     - delay: 200ms
+  #     - light.turn_off:
+  #         id: activity_led
+  #     - delay: 150ms
+  #     - light.turn_on:
+  #         id: activity_led
+  #         brightness: 100%
+  #         red: 100%
+  #         blue: 100%
+  #         green: 100%
+  #     - delay: 200ms
+  #     - light.turn_off:
+  #         id: activity_led
+
+
+  on_loop:
+    - if:
+        condition:
+          and:
+            - api.connected:
+            - lambda: "return id(connecting);"
+            - lambda: "return id(beep_sound_state);"
+        then:
+          - logger.log: API is connected!
+          - output.esp8266_pwm.set_frequency:
+              id: buzzer
+              frequency: 500hz
+          - output.set_level:
+              id: buzzer
+              level: 50%
+          - delay: 100ms
+          - output.esp8266_pwm.set_frequency:
+              id: buzzer
+              frequency: 750hz
+          - output.set_level:
+              id: buzzer
+              level: 50%
+          - delay: 100ms
+          - output.esp8266_pwm.set_frequency:
+              id: buzzer
+              frequency: 1000Hz
+          - output.set_level:
+              id: buzzer
+              level: 50%
+          - delay: 100ms
+          - output.turn_off: buzzer       
+          - globals.set:
+              id: connecting
+              value: 'false' 
+globals:
+  - id: beep_sound_state
+    type: bool
+    initial_value: 'true'
+  - id: connecting
+    type: bool
+    initial_value: 'true'
+  - id: led_enable
+    type: bool
+    initial_value: 'true'
+    
+switch:
+  - platform: template
+    name: "Sound"
+    icon: mdi:volume-high
+    lambda: |-
+      if (id(beep_sound_state)) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - globals.set:
+          id: beep_sound_state
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: beep_sound_state
+          value: 'false'
+  - platform: template
+    name: "LED enable"
+    lambda: |-
+      if (id(led_enable)) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
       - globals.set:
           id: led_enable
           value: 'true'
-  #    - output.turn_off:
-  #        id: onboard_led
-      - light.turn_on:
-          id: activity_led
-          brightness: 100%
-          red: 30%
-          blue: 100%
-          green: 40%
-      - delay: 200ms
-      - light.turn_off:
-          id: activity_led
-      - delay: 150ms
-      - light.turn_on:
-          id: activity_led
-          brightness: 100%
-          red: 30%
-          blue: 100%
-          green: 40%
-      - delay: 200ms
-      - light.turn_off:
-          id: activity_led
-      - delay: 150ms
-      - light.turn_on:
-          id: activity_led
-          brightness: 100%
-          red: 30%
-          blue: 100%
-          green: 40%
-      - delay: 200ms
-      - light.turn_off:
-          id: activity_led
-      - delay: 150ms
-      - light.turn_on:
-          id: activity_led
-          brightness: 100%
-          red: 30%
-          blue: 100%
-          green: 40%
-      - delay: 1000ms
-      - light.turn_off:
-          id: activity_led
-  
-  globals:
-    - id: led_enable
-      type: bool
-  
-  spi:
-    clk_pin: D4
-    miso_pin: D2
-    mosi_pin: D3
-  
-  pn532:
-    cs_pin: D1
-    update_interval: 1s
-    on_tag:
+    turn_off_action:
+      - globals.set:
+          id: led_enable
+          value: 'false'
+          
+
+
+#wifi insert your SSID and Your PWD once connected   
+#wifi insert your SSID and Your PWD once connected   
+wifi:
+  ap:
+    ssid: rfidreader
+captive_portal:
+# Enable logging
+logger:
+  baud_rate: 9600
+# Enable Home Assistant API
+api:
+  password: !secret ESP_API_PWD
+  services:
+    - service: rfidreader_tag_ok
       then:
-      - homeassistant.event:
-          event: esphome.rfid_read
-          data:
-            device_id: tagreader  # this is the ESPHome device name in your ESPHome conf
-          data_template:
-            tag_id: !lambda "return x;"
-      - if:      
-          condition:
-            lambda: "return id(led_enable);"
-          then:
-          - light.turn_on:
-              id: activity_led
-              brightness: 100%
-              red: 35%
-              blue: 100%
-              green: 60%
-          - delay: 500ms
-          - light.turn_off:
-              id: activity_led
-      - delay: 2000ms
-      - text_sensor.template.publish:
-          id: rfid_tag
-          state: 'waiting'
-  
-  light:
-    - platform: fastled_clockless
-      chipset: WS2811
-      pin: D8
-      default_transition_length: 10ms
-      num_leds: 1
-      rgb_order: GRB
-      id: activity_led
-      restore_mode: ALWAYS_OFF
-      name: "Activity LED"
-      internal: true
-  
-  #output:
-  #  - platform: gpio
-  #    pin: GPIO2
-  #    id: onboard_led
-  #    inverted: true
-  
-  switch:
-    - platform: template
-      name: "$upper_devicename LED enabled"
-      restore_state: true
-      lambda: |-
-        if (id(led_enable)) {
-          return true;
-        } else {
-          return false;
-        }
-      turn_on_action:
-        - globals.set:
-            id: led_enable
-            value: 'true'
-      turn_off_action:
-        - globals.set:
-            id: led_enable
-            value: 'false'
-  
-  text_sensor:
-    - platform: template
-      name: "$upper_devicename Tag"
-      id: rfid_tag
-    - platform: homeassistant
-      name: ha_state
-      entity_id: sensor.rfid_tag
+      - output.esp8266_pwm.set_frequency:
+          id: buzzer
+          frequency: 1000Hz
+      - output.set_level:
+          id: buzzer
+          level: 50%
+      - delay: 120ms
+      - output.turn_off: buzzer
+      
+    - service: rfidreader_tag_ko
+      then:
+      - output.esp8266_pwm.set_frequency:
+          id: buzzer
+          frequency: 1Hz
+      - output.set_level:
+          id: buzzer
+          level: 50%
+      - delay: 250ms
+      - output.turn_off: buzzer      
+
+ota:
+  password: !secret ESP_OTA_PWD
+spi:
+  clk_pin: GPIO1
+  miso_pin: D1
+  mosi_pin: D2
+
+pn532:
+  cs_pin: D3
+  update_interval: 1s
+  on_tag:
+    then:
+    - text_sensor.template.publish:
+        id: rfid_tag
+        state: !lambda 'return x;'
+    - homeassistant.event:
+        event: esphome.rfid_read
+        data:
+          device_id: $devicename
+        data_template: 
+          tag_id: !lambda 'return x;'
+          
+    - if:      
+        condition:
+          lambda: "return id(led_enable);"
+        then:
+        - light.turn_on:
+            id: activity_led
+            brightness: 100%
+            red: 0%
+            green: 100%
+            blue: 0%
+        - delay: 500ms
+        - light.turn_off:
+            id: activity_led
+    - if:      
+        condition:
+          lambda: "return id(beep_sound_state);"
+        then:
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 500hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 750hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 1000Hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+
+
+
+
+    
+output:
+  - platform: esp8266_pwm
+    pin: D8
+    id: buzzer
+         
+text_sensor:
+
+- platform: template
+  name: "RFID Tag"
+  id: rfid_tag
+
+- platform: template
+  id: connected 
+
+
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812
+    pin: D7
+    default_transition_length: 10ms
+    num_leds: 1
+    rgb_order: GRB
+    id: activity_led
+    restore_mode: ALWAYS_OFF
+    name: "Activity LED"
+    internal: true
