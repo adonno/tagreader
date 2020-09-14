@@ -2,7 +2,7 @@
 
 The tag reader is a simple to build/use NFC tag reader, specially created for [Home Assistant](https://www.home-assistant.io). It is using a Wemos D1 and the PN532 NFC module. The firmware is built using [ESPhome](https://www.esphome.io).
 
-> Do you just want the reader and not bother with collecting the parts or printing the case yourself? I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno.com/product/tag-reader/).
+> I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno.com/product/tag-reader/).
 
 ![Photos of the final product](https://raw.githubusercontent.com/adonno/tagreader/master/docs/cases.jpg)
 
