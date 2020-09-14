@@ -6,7 +6,7 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 ## Buying a tag reader
 
-Do you just want the reader and not bother with collecting the parts or printing the case yourself? I am selling a pre-built version, a DIY version (assembly required) or just the case (get own components). Check it out on [my website](https://adonno.com/product/tag-reader/).
+Do you just want the reader and not bother with collecting the parts or printing the case yourself? I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno.com/product/tag-reader/).
 
 ## Configuring for use with Home Assistant
 
