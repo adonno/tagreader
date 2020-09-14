@@ -4,6 +4,10 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 ![Photos of the final product](https://raw.githubusercontent.com/adonno/tagreader/master/docs/cases.jpg)
 
+## Buying a tag reader
+
+Do you just want the reader and not bother with collecting the parts or printing the case yourself? I am selling a pre-built version, a DIY version (assembly required) or just the case (get own components). Check it out on [my website](https://adonno.com/product/tag-reader/).
+
 ## Configuring for use with Home Assistant
 
 If the tag reader is unable to connect to a wifi network, it will start a WiFi access point with a captive portal to allow you to enter your WiFi credentials.
@@ -14,21 +18,9 @@ A custom component is required for Home Assistant at this time to link the tag r
 
 ## Usage
 
-Each tag that is scanned will result in a tag scan event in Home Assistant. You can manage your tags and automate them in the Home Assistant UI under config -> tags.
+Each tag that is scanned will result in a `tag_scanned` event in Home Assistant. You can manage your tags and automate them in the Home Assistant UI under config -> tags.
 
 ![Screenshot of the Home Assistant tag UI](https://raw.githubusercontent.com/adonno/tagreader/master/docs/tag-ui.gif)
-
-## Options
-
-The tag reader is available in three different configurations:
-
-- Plug-and-play. A pre-built, pre-configured tag reader, ready to use.
-- Pre-configured components. All required components and the case for you to enjoy building yourself.
-- Case only. Order a case to use with your own components.
-
-## Additional component
-
-In order to be able to use the tag reader with the new tag integration added in Home Assistant v 0.115, a special custom component is required
 
 ## Contributing
 
