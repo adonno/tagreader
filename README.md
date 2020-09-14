@@ -26,6 +26,10 @@ The tag reader is available in three different configurations:
 - Pre-configured components. All required components and the case for you to enjoy building yourself.
 - Case only. Order a case to use with your own components.
 
+## Additional component
+
+In order to be able to use the tag reader with the new tag integration added in Home Assistant v 0.115, a special custom component is required
+
 ## Contributing
 
 TODO
