@@ -4,7 +4,7 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 ![Photos of the final product](https://raw.githubusercontent.com/adonno/tagreader/master/docs/cases.jpg)
 
-## Installation
+## Configuring for use with Home Assistant
 
 If the tag reader is unable to connect to a wifi network, it will start a WiFi access point with a captive portal to allow you to enter your WiFi credentials.
 
