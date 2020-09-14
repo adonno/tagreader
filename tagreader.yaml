@@ -175,7 +175,7 @@ pn532:
   cs_pin: D3
   update_interval: 1s
   on_tag:
-#TODO - Add condition to read only once every 5 seconds
+#TODO #3 - Add condition to read only once every 5 seconds
     then:
     - text_sensor.template.publish:
         id: rfid_tag
