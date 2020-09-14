@@ -91,9 +91,6 @@ switch:
           id: led_enable
           value: 'false'
           
-
-
-#wifi insert your SSID and Your PWD once connected   
 #wifi insert your SSID and Your PWD once connected   
 wifi:
   ap:
