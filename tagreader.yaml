@@ -10,42 +10,6 @@ esphome:
   name: $devicename
   platform: ESP8266
   board: d1_mini
-  includes:
-  # on_boot:
-  #   priority: -10
-  #   then:
-  #     - output.turn_off:
-  #         id: onboard_led
-  #     - light.turn_on:
-  #         id: activity_led
-  #         brightness: 100%
-  #         red: 100%
-  #         blue: 100%
-  #         green: 100%
-  #     - delay: 200ms
-  #     - light.turn_off:
-  #         id: activity_led
-  #     - delay: 150ms
-  #     - light.turn_on:
-  #         id: activity_led
-  #         brightness: 100%
-  #         red: 100%
-  #         blue: 100%
-  #         green: 100%
-  #     - delay: 200ms
-  #     - light.turn_off:
-  #         id: activity_led
-  #     - delay: 150ms
-  #     - light.turn_on:
-  #         id: activity_led
-  #         brightness: 100%
-  #         red: 100%
-  #         blue: 100%
-  #         green: 100%
-  #     - delay: 200ms
-  #     - light.turn_off:
-  #         id: activity_led
-
 
   on_loop:
     - if:
