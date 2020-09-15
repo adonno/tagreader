@@ -6,6 +6,19 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 ![Photos of the final product](https://raw.githubusercontent.com/adonno/tagreader/master/docs/cases.jpg)
 
+## Building the tag reader
+
+To build your own tag reader, you need the following components:
+
+ - ESP8266 D1 Mini
+ - PN532 NFC Reader
+ - WS2812
+ - Buzzer
+ 
+The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
+
+To flash the reader to your D1 Mini, load up the [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml) in ESPHome. If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
+
 ## Configuring for use with Home Assistant
 
 If the tag reader is unable to connect to a wifi network, it will start a WiFi access point with a captive portal to allow you to enter your WiFi credentials.
