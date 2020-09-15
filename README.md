@@ -10,22 +10,21 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 To build your own tag reader, you need the following components:
 
- - ESP8266 D1 Mini [get yours here](https://s.click.aliexpress.com/e/_d8l72oB)
- - PN532 NFC Reader [get yours here](https://s.click.aliexpress.com/e/_dZNORIJ)
- - WS2812 [get yours here](https://s.click.aliexpress.com/e/_d82GRqr)
- - Buzzer [get yours here](https://s.click.aliexpress.com/e/_dZ5F5yj)
+ - [ESP8266 D1 Mini](https://s.click.aliexpress.com/e/_d8l72oB)
+ - [PN532 NFC Reader](https://s.click.aliexpress.com/e/_dZNORIJ)
+ - [WS2812](https://s.click.aliexpress.com/e/_d82GRqr)
+ - [Buzzer](https://s.click.aliexpress.com/e/_dZ5F5yj)
 
 The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
 
 ### Connecting the components
 ![Photo of schematics](picture.jpg)
 
-Connecting the components is fairly easy, but it does require soldering. You will need the following:
+There are not too many components to connect, but it does require soldering. You will need the following:
+
 - Solder
 - Soldering iron with a fairly thin tip
 - About 40cm of thin wire, in, preferably, at least 6 different colors.
-
-
 
 To flash the reader firmware to your D1 Mini you have two options. You can load up the [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml) in ESPHome and flash it from there, or you can use something like [NodeMCU PyFlasher](https://github.com/marcelstoer/nodemcu-pyflasher). If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 
