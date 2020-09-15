@@ -10,7 +10,7 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 To build your own tag reader, you need the following components:
 
- - ESP8266 D1 Mini
+ - ESP8266 D1 Mini https://s.click.aliexpress.com/e/_d8l72oB
  - PN532 NFC Reader
  - WS2812
  - Buzzer
