@@ -17,7 +17,7 @@ To build your own tag reader, you need the following components:
 
 The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
 
-### Connectiong the components
+### Connecting the components
 ![Photo of schematics](picture.jpg)
 
 Connecting the components is fairly easy, but it does require soldering. You will need the following:
