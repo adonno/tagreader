@@ -128,7 +128,7 @@ api:
 ota:
   password: !secret ESP_OTA_PWD
 spi:
-  clk_pin: GPIO1
+  clk_pin: TX
   miso_pin: D1
   mosi_pin: D2
 
