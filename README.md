@@ -26,7 +26,7 @@ There are not too many components to connect, but it does require soldering. You
 - Soldering iron with a fairly thin tip
 - About 40cm of thin wire, in, preferably, at least 6 different colors.
 
-To flash the reader firmware to your D1 Mini you have two options. You can load up the [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml) in ESPHome and flash it from there, or you can use something like [NodeMCU PyFlasher](https://github.com/marcelstoer/nodemcu-pyflasher). If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
+To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml). If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 
 ![Open Case](https://raw.githubusercontent.com/adonno/tagreader/master/docs/open-case.jpg)
 
