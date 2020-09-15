@@ -14,10 +14,12 @@ To build your own tag reader, you need the following components:
  - PN532 NFC Reader
  - WS2812
  - Buzzer
- 
+
 The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
 
 To flash the reader to your D1 Mini, load up the [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml) in ESPHome. If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
+
+![Open Case](https://raw.githubusercontent.com/adonno/tagreader/master/docs/open-case.jpg)
 
 ## Configuring for use with Home Assistant
 
