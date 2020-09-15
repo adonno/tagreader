@@ -38,7 +38,3 @@ Each tag that is scanned will result in a `tag_scanned` event in Home Assistant.
 ## Contributing
 
 TODO
-
-## License
-
-TODO
