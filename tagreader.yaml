@@ -131,7 +131,8 @@ pn532:
             id: buzzer
             level: 50%
         - delay: 100ms
-        - output.turn_off: buzzer    - if:
+        - output.turn_off: buzzer
+    - if:
         condition:
           switch.is_on: led_enable
         then:
