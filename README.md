@@ -18,6 +18,7 @@ To build your own tag reader, you need the following components:
 The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
 
 ### Connecting the components
+
 ![Photo of schematics](https://github.com/adonno/tagreader/blob/master/Schematics/tag_reader_schematics_v1.png)
 
 There are not too many components to connect, but it does require soldering. You will need the following:
@@ -32,15 +33,15 @@ To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yam
 
 ## Configuring for use with Home Assistant
 
+The tag reader requires [Home Assistant](https://www.home-assistant.io) 0.115 or later.
+
 If the tag reader is unable to connect to a wifi network, it will start a WiFi access point with a captive portal to allow you to enter your WiFi credentials.
 
-The tag reader will be automatically found by Home Assistant once the tag reader is connected to the same network. You can follow the instructions in the UI to set it up.
-
-A custom component is required for Home Assistant at this time to link the tag reader to the tag integration in Home Assistant. Copy [this file](https://raw.githubusercontent.com/adonno/tagreader/master/custom_components/esphome_tag.py) to `<config>/custom_components/esphome_tag.py` and add `esphome_tag:` to your `configuration.yaml` file.
+The tag reader will be automatically discovered by Home Assistant once the tag reader is connected to the same network. You can follow the instructions in the UI to set it up.
 
 ## Usage
 
-Each tag that is scanned will result in a `tag_scanned` event in Home Assistant. You can manage your tags and automate them in the Home Assistant UI under config -> tags.
+Scanned tags can be managed from the tags interface in Home Assistant. You can find it under config -> tags.
 
 ![Screenshot of the Home Assistant tag UI](https://raw.githubusercontent.com/adonno/tagreader/master/docs/tag-ui.gif)
 

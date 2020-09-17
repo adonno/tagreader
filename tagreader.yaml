@@ -41,10 +41,10 @@ esphome:
               id: buzzer
               level: 50%
           - delay: 100ms
-          - output.turn_off: buzzer       
+          - output.turn_off: buzzer
           - globals.set:
               id: connecting
-              value: 'false' 
+              value: 'false'
 globals:
   - id: beep_sound_state
     type: bool
@@ -55,7 +55,7 @@ globals:
   - id: led_enable
     type: bool
     initial_value: 'true'
-    
+
 switch:
   - platform: template
     name: "Sound"
@@ -90,8 +90,8 @@ switch:
       - globals.set:
           id: led_enable
           value: 'false'
-          
-#wifi insert your SSID and Your PWD once connected   
+
+#wifi insert your SSID and Your PWD once connected
 wifi:
   ap:
     ssid: rfidreader
@@ -113,7 +113,7 @@ api:
           level: 50%
       - delay: 120ms
       - output.turn_off: buzzer
-      
+
     - service: rfidreader_tag_ko
       then:
       - output.esp8266_pwm.set_frequency:
@@ -123,7 +123,7 @@ api:
           id: buzzer
           level: 50%
       - delay: 250ms
-      - output.turn_off: buzzer      
+      - output.turn_off: buzzer
 
 ota:
   password: !secret ESP_OTA_PWD
@@ -141,14 +141,13 @@ pn532:
     - text_sensor.template.publish:
         id: rfid_tag
         state: !lambda 'return x;'
+    # Once ESPHome 1.15.2 or later is released, upgrade this according to
+    # https://github.com/adonno/tagreader/issues/6
     - homeassistant.event:
-        event: esphome.rfid_read
-        data:
-          device_id: $devicename
-        data_template: 
-          tag_id: !lambda 'return x;'
-          
-    - if:      
+      event: esphome.tag_scanned
+      data:
+        tag_id: !lambda 'return x;'
+    - if:
         condition:
           lambda: "return id(led_enable);"
         then:
@@ -161,7 +160,7 @@ pn532:
         - delay: 500ms
         - light.turn_off:
             id: activity_led
-    - if:      
+    - if:
         condition:
           lambda: "return id(beep_sound_state);"
         then:
@@ -191,12 +190,12 @@ pn532:
 
 
 
-    
+
 output:
   - platform: esp8266_pwm
     pin: D8
     id: buzzer
-         
+
 text_sensor:
 
 - platform: template
@@ -204,7 +203,7 @@ text_sensor:
   id: rfid_tag
 
 - platform: template
-  id: connected 
+  id: connected
 
 
 
