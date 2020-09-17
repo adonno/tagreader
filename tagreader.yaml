@@ -94,7 +94,7 @@ spi:
 
 pn532:
   cs_pin: D3
-  update_interval: 1s
+  update_interval: 2s
   on_tag:
 #TODO #3 - Add condition to read only once every 5 seconds
     then:
