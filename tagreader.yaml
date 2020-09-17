@@ -55,7 +55,7 @@ globals:
   - id: led_enable
     type: bool
     initial_value: 'true'
-    
+
 switch:
   - platform: template
     name: "Sound"
@@ -113,7 +113,7 @@ api:
           level: 50%
       - delay: 120ms
       - output.turn_off: buzzer
-      
+
     - service: rfidreader_tag_ko
       then:
       - output.esp8266_pwm.set_frequency:
@@ -138,9 +138,6 @@ pn532:
   on_tag:
 #TODO #3 - Add condition to read only once every 5 seconds
     then:
-    - text_sensor.template.publish:
-        id: rfid_tag
-        state: !lambda 'return x;'
     - homeassistant.event:
         event: esphome.rfid_read
         data:
@@ -191,21 +188,17 @@ pn532:
 
 
 
-    
+
 output:
   - platform: esp8266_pwm
     pin: D8
     id: buzzer
-         
+
+
 text_sensor:
 
 - platform: template
-  name: "RFID Tag"
-  id: rfid_tag
-
-- platform: template
   id: connected 
-
 
 
 light:
