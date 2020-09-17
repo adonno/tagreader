@@ -2,7 +2,6 @@ substitutions:
   devicename: tagreader
   upper_devicename: TagReader
 
-
 web_server:
   port: 80
 
@@ -19,7 +18,7 @@ esphome:
     - logger.log: API is connected!
     - if:
         condition:
-          switch.is_on: beep_sound_state
+          lambda: "return id(beep_enable);"
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
@@ -46,12 +45,12 @@ esphome:
 
 switch:
 - platform: template
-  name: "Sound"
-  id: beep_sound_state
+  name: "Buzzer Enabled"
+  id: beep_enable
   icon: mdi:volume-high
   optimistic: true
 - platform: template
-  name: "LED enable"
+  name: "LED enabled"
   id: led_enable
   optimistic: true
 
@@ -121,7 +120,7 @@ pn532:
             id: activity_led
     - if:
         condition:
-          switch.is_on: beep_sound_state
+          lambda: "return id(beep_enable);"
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
