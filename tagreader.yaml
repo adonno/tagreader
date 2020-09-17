@@ -11,15 +11,16 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
-  on_loop:
+  on_boot:
+    priority: -10
+    then:
+    - wait_until:
+        api.connected:
+    - logger.log: API is connected!
     - if:
         condition:
-          and:
-            - api.connected:
-            - lambda: "return id(connecting);"
-            - lambda: "return id(beep_sound_state);"
+          switch.is_on: beep_sound_state
         then:
-          - logger.log: API is connected!
           - output.esp8266_pwm.set_frequency:
               id: buzzer
               frequency: 500hz
@@ -41,57 +42,19 @@ esphome:
               id: buzzer
               level: 50%
           - delay: 100ms
-          - output.turn_off: buzzer       
-          - globals.set:
-              id: connecting
-              value: 'false' 
-globals:
-  - id: beep_sound_state
-    type: bool
-    initial_value: 'true'
-  - id: connecting
-    type: bool
-    initial_value: 'true'
-  - id: led_enable
-    type: bool
-    initial_value: 'true'
-
+          - output.turn_off: buzzer
 switch:
-  - platform: template
-    name: "Sound"
-    icon: mdi:volume-high
-    lambda: |-
-      if (id(beep_sound_state)) {
-        return true;
-      } else {
-        return false;
-      }
-    turn_on_action:
-      - globals.set:
-          id: beep_sound_state
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: beep_sound_state
-          value: 'false'
-  - platform: template
-    name: "LED enable"
-    lambda: |-
-      if (id(led_enable)) {
-        return true;
-      } else {
-        return false;
-      }
-    turn_on_action:
-      - globals.set:
-          id: led_enable
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: led_enable
-          value: 'false'
-          
-#wifi insert your SSID and Your PWD once connected   
+- platform: template
+  name: "Sound"
+  id: beep_sound_state
+  icon: mdi:volume-high
+  optimistic: true
+- platform: template
+  name: "LED enable"
+  id: led_enable
+  optimistic: true
+
+#wifi insert your SSID and Your PWD once connected
 wifi:
   ap:
     ssid: rfidreader
@@ -103,28 +66,26 @@ logger:
 api:
   password: !secret ESP_API_PWD
   services:
-    - service: rfidreader_tag_ok
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1000Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 120ms
-      - output.turn_off: buzzer
-
-    - service: rfidreader_tag_ko
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 250ms
-      - output.turn_off: buzzer      
-
+  - service: rfidreader_tag_ok
+    then:
+    - output.esp8266_pwm.set_frequency:
+        id: buzzer
+        frequency: 1000Hz
+    - output.set_level:
+        id: buzzer
+        level: 50%
+    - delay: 120ms
+    - output.turn_off: buzzer
+  - service: rfidreader_tag_ko
+    then:
+    - output.esp8266_pwm.set_frequency:
+        id: buzzer
+        frequency: 1Hz
+    - output.set_level:
+        id: buzzer
+        level: 50%
+    - delay: 250ms
+    - output.turn_off: buzzer
 ota:
   password: !secret ESP_OTA_PWD
 spi:
@@ -142,25 +103,12 @@ pn532:
         event: esphome.rfid_read
         data:
           device_id: $devicename
-        data_template: 
+        data_template:
           tag_id: !lambda 'return x;'
-          
-    - if:      
+
+    - if:
         condition:
-          lambda: "return id(led_enable);"
-        then:
-        - light.turn_on:
-            id: activity_led
-            brightness: 100%
-            red: 0%
-            green: 100%
-            blue: 0%
-        - delay: 500ms
-        - light.turn_off:
-            id: activity_led
-    - if:      
-        condition:
-          lambda: "return id(beep_sound_state);"
+          switch.is_on: beep_sound_state
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
@@ -183,23 +131,24 @@ pn532:
             id: buzzer
             level: 50%
         - delay: 100ms
-        - output.turn_off: buzzer
-
-
-
-
+        - output.turn_off: buzzer    - if:
+        condition:
+          switch.is_on: led_enable
+        then:
+        - light.turn_on:
+            id: activity_led
+            brightness: 100%
+            red: 0%
+            green: 100%
+            blue: 0%
+        - delay: 500ms
+        - light.turn_off:
+            id: activity_led
 
 output:
-  - platform: esp8266_pwm
-    pin: D8
-    id: buzzer
-
-
-text_sensor:
-
-- platform: template
-  id: connected 
-
+- platform: esp8266_pwm
+  pin: D8
+  id: buzzer
 
 light:
   - platform: fastled_clockless
