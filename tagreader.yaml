@@ -41,10 +41,10 @@ esphome:
               id: buzzer
               level: 50%
           - delay: 100ms
-          - output.turn_off: buzzer       
+          - output.turn_off: buzzer
           - globals.set:
               id: connecting
-              value: 'false' 
+              value: 'false'
 globals:
   - id: beep_sound_state
     type: bool
@@ -90,8 +90,8 @@ switch:
       - globals.set:
           id: led_enable
           value: 'false'
-          
-#wifi insert your SSID and Your PWD once connected   
+
+#wifi insert your SSID and Your PWD once connected
 wifi:
   ap:
     ssid: rfidreader
@@ -123,7 +123,7 @@ api:
           id: buzzer
           level: 50%
       - delay: 250ms
-      - output.turn_off: buzzer      
+      - output.turn_off: buzzer
 
 ota:
   password: !secret ESP_OTA_PWD
@@ -139,13 +139,10 @@ pn532:
 #TODO #3 - Add condition to read only once every 5 seconds
     then:
     - homeassistant.event:
-        event: esphome.rfid_read
+        event: esphome.tag_scanned
         data:
-          device_id: $devicename
-        data_template: 
           tag_id: !lambda 'return x;'
-          
-    - if:      
+    - if:
         condition:
           lambda: "return id(led_enable);"
         then:
@@ -158,7 +155,7 @@ pn532:
         - delay: 500ms
         - light.turn_off:
             id: activity_led
-    - if:      
+    - if:
         condition:
           lambda: "return id(beep_sound_state);"
         then:
@@ -186,9 +183,6 @@ pn532:
         - output.turn_off: buzzer
 
 
-
-
-
 output:
   - platform: esp8266_pwm
     pin: D8
@@ -198,7 +192,7 @@ output:
 text_sensor:
 
 - platform: template
-  id: connected 
+  id: connected
 
 
 light:
