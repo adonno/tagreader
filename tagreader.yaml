@@ -11,85 +11,49 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
-  on_loop:
+  on_boot:
+    priority: -10
+    then:
+    - wait_until:
+        api.connected:
+    - logger.log: API is connected!
     - if:
         condition:
-          and:
-            - api.connected:
-            - lambda: "return id(connecting);"
-            - lambda: "return id(beep_sound_state);"
+          switch.is_on: beep_sound_state
         then:
-          - logger.log: API is connected!
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 500hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 750hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 1000Hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.turn_off: buzzer
-          - globals.set:
-              id: connecting
-              value: 'false'
-globals:
-  - id: beep_sound_state
-    type: bool
-    initial_value: 'true'
-  - id: connecting
-    type: bool
-    initial_value: 'true'
-  - id: led_enable
-    type: bool
-    initial_value: 'true'
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 500hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 750hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 1000Hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
 
 switch:
-  - platform: template
-    name: "Sound"
-    icon: mdi:volume-high
-    lambda: |-
-      if (id(beep_sound_state)) {
-        return true;
-      } else {
-        return false;
-      }
-    turn_on_action:
-      - globals.set:
-          id: beep_sound_state
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: beep_sound_state
-          value: 'false'
-  - platform: template
-    name: "LED enable"
-    lambda: |-
-      if (id(led_enable)) {
-        return true;
-      } else {
-        return false;
-      }
-    turn_on_action:
-      - globals.set:
-          id: led_enable
-          value: 'true'
-    turn_off_action:
-      - globals.set:
-          id: led_enable
-          value: 'false'
+- platform: template
+  name: "Sound"
+  id: beep_sound_state
+  icon: mdi:volume-high
+  optimistic: true
+- platform: template
+  name: "LED enable"
+  id: led_enable
+  optimistic: true
 
 #wifi insert your SSID and Your PWD once connected
 wifi:
@@ -157,7 +121,7 @@ pn532:
             id: activity_led
     - if:
         condition:
-          lambda: "return id(beep_sound_state);"
+          switch.is_on: beep_sound_state
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
@@ -181,28 +145,33 @@ pn532:
             level: 50%
         - delay: 100ms
         - output.turn_off: buzzer
-
+    - if:
+        condition:
+          switch.is_on: led_enable
+        then:
+        - light.turn_on:
+            id: activity_led
+            brightness: 100%
+            red: 0%
+            green: 100%
+            blue: 0%
+        - delay: 500ms
+        - light.turn_off:
+            id: activity_led
 
 output:
-  - platform: esp8266_pwm
-    pin: D8
-    id: buzzer
-
-
-text_sensor:
-
-- platform: template
-  id: connected
-
+- platform: esp8266_pwm
+  pin: D8
+  id: buzzer
 
 light:
-  - platform: fastled_clockless
-    chipset: WS2812
-    pin: D7
-    default_transition_length: 10ms
-    num_leds: 1
-    rgb_order: GRB
-    id: activity_led
-    restore_mode: ALWAYS_OFF
-    name: "Activity LED"
-    internal: true
+- platform: fastled_clockless
+  chipset: WS2812
+  pin: D7
+  default_transition_length: 10ms
+  num_leds: 1
+  rgb_order: GRB
+  id: activity_led
+  restore_mode: ALWAYS_OFF
+  name: "Activity LED"
+  internal: true
