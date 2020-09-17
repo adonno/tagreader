@@ -2,10 +2,6 @@ substitutions:
   devicename: tagreader
   upper_devicename: TagReader
 
-
-web_server:
-  port: 80
-
 esphome:
   name: $devicename
   platform: ESP8266
