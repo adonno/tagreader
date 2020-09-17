@@ -138,11 +138,6 @@ pn532:
   on_tag:
 #TODO #3 - Add condition to read only once every 5 seconds
     then:
-    - text_sensor.template.publish:
-        id: rfid_tag
-        state: !lambda 'return x;'
-    # Once ESPHome 1.15.2 or later is released, upgrade this according to
-    # https://github.com/adonno/tagreader/issues/6
     - homeassistant.event:
         event: esphome.tag_scanned
         data:
@@ -188,23 +183,16 @@ pn532:
         - output.turn_off: buzzer
 
 
-
-
-
 output:
   - platform: esp8266_pwm
     pin: D8
     id: buzzer
 
+
 text_sensor:
 
 - platform: template
-  name: "RFID Tag"
-  id: rfid_tag
-
-- platform: template
   id: connected
-
 
 
 light:
