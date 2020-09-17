@@ -21,28 +21,29 @@ esphome:
         condition:
           switch.is_on: beep_sound_state
         then:
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 500hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 750hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.esp8266_pwm.set_frequency:
-              id: buzzer
-              frequency: 1000Hz
-          - output.set_level:
-              id: buzzer
-              level: 50%
-          - delay: 100ms
-          - output.turn_off: buzzer
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 500hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 750hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 1000Hz
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+
 switch:
 - platform: template
   name: "Sound"
@@ -152,13 +153,13 @@ output:
   id: buzzer
 
 light:
-  - platform: fastled_clockless
-    chipset: WS2812
-    pin: D7
-    default_transition_length: 10ms
-    num_leds: 1
-    rgb_order: GRB
-    id: activity_led
-    restore_mode: ALWAYS_OFF
-    name: "Activity LED"
-    internal: true
+- platform: fastled_clockless
+  chipset: WS2812
+  pin: D7
+  default_transition_length: 10ms
+  num_leds: 1
+  rgb_order: GRB
+  id: activity_led
+  restore_mode: ALWAYS_OFF
+  name: "Activity LED"
+  internal: true
