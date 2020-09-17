@@ -18,7 +18,7 @@ esphome:
     - logger.log: API is connected!
     - if:
         condition:
-          lambda: "return id(beep_enable);"
+          switch.is_on: buzzer_enabled
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
@@ -46,12 +46,12 @@ esphome:
 switch:
 - platform: template
   name: "Buzzer Enabled"
-  id: beep_enable
+  id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
 - platform: template
   name: "LED enabled"
-  id: led_enable
+  id: led_enabled
   optimistic: true
 
 #wifi insert your SSID and Your PWD once connected
@@ -107,7 +107,7 @@ pn532:
           tag_id: !lambda 'return x;'
     - if:
         condition:
-          lambda: "return id(led_enable);"
+          switch.is_on: led_enabled
         then:
         - light.turn_on:
             id: activity_led
@@ -120,7 +120,7 @@ pn532:
             id: activity_led
     - if:
         condition:
-          lambda: "return id(beep_enable);"
+          switch.is_on: buzzer_enabled
         then:
         - output.esp8266_pwm.set_frequency:
             id: buzzer
@@ -146,7 +146,7 @@ pn532:
         - output.turn_off: buzzer
     - if:
         condition:
-          switch.is_on: led_enable
+          switch.is_on: led_enabled
         then:
         - light.turn_on:
             id: activity_led
