@@ -144,9 +144,9 @@ pn532:
     # Once ESPHome 1.15.2 or later is released, upgrade this according to
     # https://github.com/adonno/tagreader/issues/6
     - homeassistant.event:
-      event: esphome.tag_scanned
-      data:
-        tag_id: !lambda 'return x;'
+        event: esphome.tag_scanned
+        data:
+          tag_id: !lambda 'return x;'
     - if:
         condition:
           lambda: "return id(led_enable);"
