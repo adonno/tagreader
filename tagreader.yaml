@@ -12,6 +12,7 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
+# If buzzer is enabled, notify on api connection success
   on_boot:
     priority: -10
     then:
@@ -24,21 +25,25 @@ esphome:
         then:
         - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
 
+# Define switches to control LED and buzzer from HA
 switch:
 - platform: template
-  name: "${upper_devicename} Buzzer Enabled"
+  name: "Buzzer Enabled"
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
 - platform: template
-  name: "${upper_devicename} LED enabled"
+  name: "LED enabled"
   id: led_enabled
   optimistic: true
 
+# Enable the captive portal for inital WiFi setup
 captive_portal:
+
 # Enable logging
 logger:
   baud_rate: 9600
+
 # Enable Home Assistant API
 api:
   password: !secret ESP_API_PWD
@@ -51,16 +56,22 @@ api:
     then:
     - rtttl.play: "beep:d=8,o=5,b=100:b"
 
+# Enable OTA upgrade
 ota:
   password: !secret ESP_OTA_PWD
+
+# Enable SPI interface
 spi:
   clk_pin: TX
   miso_pin: D1
   mosi_pin: D2
 
+# Configure the PN532 module
 pn532:
   cs_pin: D3
   update_interval: 2s
+  
+  # What happens when a tag is read
   on_tag:
     then:
     - homeassistant.event:
@@ -99,14 +110,17 @@ pn532:
         - light.turn_off:
             id: activity_led
 
+# Define the buzzer output
 output:
 - platform: esp8266_pwm
   pin: D8
   id: buzzer
 
+# Define buzzer as output for RTTTL
 rtttl:
   output: buzzer
 
+# Configure LED
 light:
 - platform: fastled_clockless
   chipset: WS2812
@@ -116,4 +130,5 @@ light:
   rgb_order: GRB
   id: activity_led
   restore_mode: ALWAYS_OFF
+  name: "Activity LED"
   internal: true
