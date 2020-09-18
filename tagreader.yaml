@@ -30,11 +30,12 @@ switch:
 - platform: template
   name: "${upper_devicename} Buzzer Enabled"
   id: buzzer_enabled
-  icon: mdi:volume-high
+  icon: mdi:volume-vibrate
   optimistic: true
 - platform: template
   name: "${upper_devicename} LED enabled"
   id: led_enabled
+  icon: mdi:alarm-light-outline
   optimistic: true
 
 # Enable the captive portal for inital WiFi setup
