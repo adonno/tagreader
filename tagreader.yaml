@@ -17,28 +17,7 @@ esphome:
         condition:
           switch.is_on: beep_sound_state
         then:
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 500hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 750hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 1000Hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.turn_off: buzzer
+        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
 
 switch:
 - platform: template
@@ -63,27 +42,13 @@ logger:
 api:
   password: !secret ESP_API_PWD
   services:
-    - service: rfidreader_tag_ok
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1000Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 120ms
-      - output.turn_off: buzzer
+  - service: rfidreader_tag_ok
+    then:
+    - rtttl.play: "beep:d=16,o=5,b=100:b"
 
-    - service: rfidreader_tag_ko
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 250ms
-      - output.turn_off: buzzer
+  - service: rfidreader_tag_ko
+    then:
+    - rtttl.play: "beep:d=8,o=5,b=100:b"
 
 ota:
   password: !secret ESP_OTA_PWD
@@ -102,45 +67,12 @@ pn532:
         event: esphome.tag_scanned
         data:
           tag_id: !lambda 'return x;'
-    - if:
-        condition:
-          lambda: "return id(led_enable);"
-        then:
-        - light.turn_on:
-            id: activity_led
-            brightness: 100%
-            red: 0%
-            green: 100%
-            blue: 0%
-        - delay: 500ms
-        - light.turn_off:
-            id: activity_led
+
     - if:
         condition:
           switch.is_on: beep_sound_state
         then:
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 500hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 750hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 1000Hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.turn_off: buzzer
+        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     - if:
         condition:
           switch.is_on: led_enable
@@ -159,6 +91,9 @@ output:
 - platform: esp8266_pwm
   pin: D8
   id: buzzer
+
+rtttl:
+  output: buzzer
 
 light:
 - platform: fastled_clockless
