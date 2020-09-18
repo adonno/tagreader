@@ -1,10 +1,10 @@
 # Insert your SSID and Your PWD after inital setup
 wifi:
   networks:
-#    - ssid: !secret wifi_ssid          Uncomment this line (remove `#`) and enter your details in secrets.yaml file.
-#      password: !secret wifi_password  Uncomment this line (remove `#`) and enter your details in secrets.yaml file.
-  ap:                                   # <-- Delete this line after seeting up WiFi
-    ssid: rfidreader                    # <-- Delete this line after seeting up WiFi
+#    - ssid: !secret wifi_ssid          # Uncomment this line (remove # at beginning of line) and enter your details in secrets.yaml file!
+#      password: !secret wifi_password  # Uncomment this line (remove # at beginning of line) and enter your details in secrets.yaml file!
+  ap:                                   # Delete this entire line after seeting up WiFi!
+    ssid: rfidreader                    # Delete this entire line after seeting up WiFi!
 
 # Enable the captive portal for inital WiFi setup
 captive_portal:
