@@ -19,11 +19,7 @@ esphome:
     - wait_until:
         api.connected:
     - logger.log: API is connected!
-    - if:
-        condition:
-          switch.is_on: buzzer_enabled
-        then:
-        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
 
 # Define switches to control LED and buzzer from HA
 switch:
@@ -56,6 +52,12 @@ api:
   - service: rfidreader_tag_ko
     then:
     - rtttl.play: "beep:d=8,o=5,b=100:b"
+
+  - service: play_rtttl
+    variables:
+      song_str: string
+    then:
+    - rtttl.play: !lambda 'return song_str;'
 
 # Enable OTA upgrade
 ota:
