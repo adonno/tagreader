@@ -1,3 +1,8 @@
+# Insert your SSID and Your PWD after inital setup
+wifi:
+  ap:
+    ssid: rfidreader
+
 substitutions:
   devicename: tagreader
   upper_devicename: TagReader
@@ -30,10 +35,6 @@ switch:
   id: led_enabled
   optimistic: true
 
-#wifi insert your SSID and Your PWD once connected
-wifi:
-  ap:
-    ssid: rfidreader
 captive_portal:
 # Enable logging
 logger:
