@@ -2,9 +2,6 @@ substitutions:
   devicename: tagreader
   upper_devicename: TagReader
 
-web_server:
-  port: 80
-
 esphome:
   name: $devicename
   platform: ESP8266
@@ -20,28 +17,7 @@ esphome:
         condition:
           switch.is_on: buzzer_enabled
         then:
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 500hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 750hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 1000Hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.turn_off: buzzer
+        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
 
 switch:
 - platform: template
@@ -66,27 +42,13 @@ logger:
 api:
   password: !secret ESP_API_PWD
   services:
-    - service: rfidreader_tag_ok
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1000Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 120ms
-      - output.turn_off: buzzer
+  - service: rfidreader_tag_ok
+    then:
+    - rtttl.play: "beep:d=16,o=5,b=100:b"
 
-    - service: rfidreader_tag_ko
-      then:
-      - output.esp8266_pwm.set_frequency:
-          id: buzzer
-          frequency: 1Hz
-      - output.set_level:
-          id: buzzer
-          level: 50%
-      - delay: 250ms
-      - output.turn_off: buzzer
+  - service: rfidreader_tag_ko
+    then:
+    - rtttl.play: "beep:d=8,o=5,b=100:b"
 
 ota:
   password: !secret ESP_OTA_PWD
@@ -97,9 +59,8 @@ spi:
 
 pn532:
   cs_pin: D3
-  update_interval: 1s
+  update_interval: 2s
   on_tag:
-#TODO #3 - Add condition to read only once every 5 seconds
     then:
     - homeassistant.event:
         event: esphome.tag_scanned
@@ -122,28 +83,7 @@ pn532:
         condition:
           switch.is_on: buzzer_enabled
         then:
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 500hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 750hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.esp8266_pwm.set_frequency:
-            id: buzzer
-            frequency: 1000Hz
-        - output.set_level:
-            id: buzzer
-            level: 50%
-        - delay: 100ms
-        - output.turn_off: buzzer
+        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     - if:
         condition:
           switch.is_on: led_enabled
@@ -162,6 +102,9 @@ output:
 - platform: esp8266_pwm
   pin: D8
   id: buzzer
+
+rtttl:
+  output: buzzer
 
 light:
 - platform: fastled_clockless
