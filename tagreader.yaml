@@ -30,7 +30,7 @@ switch:
 - platform: template
   name: "${upper_devicename} Buzzer Enabled"
   id: buzzer_enabled
-  icon: mdi:volume-vibrate
+  icon: mdi:volume-high
   optimistic: true
 - platform: template
   name: "${upper_devicename} LED enabled"
