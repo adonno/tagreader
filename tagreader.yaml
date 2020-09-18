@@ -1,7 +1,13 @@
 # Insert your SSID and Your PWD after inital setup
 wifi:
-  ap:
-    ssid: rfidreader
+  networks:
+#    - ssid: !secret wifi_ssid          Uncomment this line (remove `#`) and enter your details in secrets.yaml file.
+#      password: !secret wifi_password  Uncomment this line (remove `#`) and enter your details in secrets.yaml file.
+  ap:                                   # <-- Delete this line after seeting up WiFi
+    ssid: rfidreader                    # <-- Delete this line after seeting up WiFi
+
+# Enable the captive portal for inital WiFi setup
+captive_portal:
 
 substitutions:
   devicename: tagreader
@@ -33,9 +39,6 @@ switch:
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
-
-# Enable the captive portal for inital WiFi setup
-captive_portal:
 
 # Enable logging
 logger:
