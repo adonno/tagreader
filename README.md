@@ -27,6 +27,12 @@ There are not too many components to connect, but it does require soldering. You
 - [Soldering iron with a fairly thin tip](https://s.click.aliexpress.com/e/_dXaI6nz)
 - [About 40cm of thin wire (at least 6 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
 
+Also make sure that you have set the switches on the PN532 to the following:
+- Switch 1: Off (down)
+- Switch 2: On (up)
+This enables the PN532 module to communicate with the D1 over SPI, and is required for the modules to work together!
+
+
 To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml). If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 
 ![Open Case](https://raw.githubusercontent.com/adonno/tagreader/master/docs/open-case.jpg)
