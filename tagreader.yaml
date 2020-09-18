@@ -26,12 +26,12 @@ esphome:
 
 switch:
 - platform: template
-  name: "Buzzer Enabled"
+  name: "${upper_devicename} Buzzer Enabled"
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
 - platform: template
-  name: "LED enabled"
+  name: "${upper_devicename} LED enabled"
   id: led_enabled
   optimistic: true
 
@@ -116,5 +116,4 @@ light:
   rgb_order: GRB
   id: activity_led
   restore_mode: ALWAYS_OFF
-  name: "Activity LED"
   internal: true
