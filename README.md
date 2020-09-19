@@ -57,3 +57,17 @@ Scanned tags can be managed from the tags interface in Home Assistant. You can f
 ## 
 
 TODO
+
+# RFID module wiring
+
+D1 Mini officals may work following the Fritz Schematics above, but the clones seem to require the following:
+
+| D1 Mini | PN532 |
+|---------|-------|
+| D0      | SCK   |
+| D1      | MISO  |
+| D2      | MOSI  |
+| D3      | SS    |
+| 5V      | VCC   |
+| G       | GND   |
+

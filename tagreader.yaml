@@ -68,7 +68,7 @@ ota:
 
 # Enable SPI interface
 spi:
-  clk_pin: TX
+  clk_pin: D0
   miso_pin: D1
   mosi_pin: D2
 
