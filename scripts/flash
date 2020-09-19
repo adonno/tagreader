@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "Getting mac address from device..."
+mac=$(esptool.py read_mac | grep -m 1 'MAC:' | grep -o '.\{8\}$' )
+mac=${mac//:/}
+
+echo "MAC ending: ${mac}"
+
+devicename="tagreader_${mac}"
+friendly_name="TagReader ${mac}"
+
+esphome --substitution devicename "${devicename}" --substitution friendly_name "${friendly_name}" tagreader.yaml compile
+esphome --substitution devicename "${devicename}" --substitution friendly_name "${friendly_name}" tagreader.yaml upload
+
+rm -rf tagreader_${mac}
+
+echo "Done tagreader_${mac}"
