@@ -11,7 +11,7 @@ captive_portal:
 
 substitutions:
   devicename: tagreader
-  upper_devicename: TagReader
+  friendly_name: TagReader
 
 esphome:
   name: $devicename
@@ -30,12 +30,12 @@ esphome:
 # Define switches to control LED and buzzer from HA
 switch:
 - platform: template
-  name: "${upper_devicename} Buzzer Enabled"
+  name: "${friendly_name} Buzzer Enabled"
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
 - platform: template
-  name: "${upper_devicename} LED enabled"
+  name: "${friendly_name} LED enabled"
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
@@ -120,5 +120,5 @@ light:
   num_leds: 1
   rgb_order: GRB
   id: activity_led
-  name: "${upper_devicename} LED"
+  name: "${friendly_name} LED"
   restore_mode: ALWAYS_OFF

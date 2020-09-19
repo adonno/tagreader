@@ -9,10 +9,10 @@ mac=${mac//:/}
 echo "MAC ending: ${mac}"
 
 devicename="tagreader_${mac}"
-upper_devicename="TagReader ${mac}"
+friendly_name="TagReader ${mac}"
 
-esphome --substitution devicename "${devicename}" --substitution upper_devicename "${upper_devicename}" tagreader.yaml compile
-esphome --substitution devicename "${devicename}" --substitution upper_devicename "${upper_devicename}" tagreader.yaml upload
+esphome --substitution devicename "${devicename}" --substitution friendly_name "${friendly_name}" tagreader.yaml compile
+esphome --substitution devicename "${devicename}" --substitution friendly_name "${friendly_name}" tagreader.yaml upload
 
 rm -rf tagreader_${mac}
 
