@@ -8,13 +8,11 @@ mac=${mac//:/}
 
 echo "MAC ending: ${mac}"
 
-sed -i "s/devicename: tagreader/devicename: tagreader_${mac}/" tagreader.yaml
-sed -i "s/upper_devicename: TagReader/upper_devicename: TagReader ${mac}/" tagreader.yaml
+devicename="tagreader_${mac}"
+upper_devicename="TagReader ${mac}"
 
-esphome tagreader.yaml compile
-esphome tagreader.yaml upload
-
-sed -i "s/.${mac}//" tagreader.yaml
+esphome --substitution devicename "${devicename}" --substitution upper_devicename "${upper_devicename}" tagreader.yaml compile
+esphome --substitution devicename "${devicename}" --substitution upper_devicename "${upper_devicename}" tagreader.yaml upload
 
 rm -rf tagreader_${mac}
 
