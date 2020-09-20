@@ -80,10 +80,7 @@ pn532:
   # What happens when a tag is read
   on_tag:
     then:
-    - homeassistant.event:
-        event: esphome.tag_scanned
-        data:
-          tag_id: !lambda 'return x;'
+    - homeassistant.tag_scanned: !lambda 'return x;'
     - if:
         condition:
           switch.is_on: buzzer_enabled
