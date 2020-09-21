@@ -12,11 +12,12 @@ captive_portal:
 substitutions:
   devicename: tagreader
   friendly_name: TagReader
+  board: d1_mini
 
 esphome:
   name: $devicename
   platform: ESP8266
-  board: d1_mini
+  board: ${board}
 
 # If buzzer is enabled, notify on api connection success
   on_boot:
