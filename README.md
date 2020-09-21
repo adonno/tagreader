@@ -35,8 +35,10 @@ Also make sure that you have set the switches on the PN532 to the following:
 
 This enables the PN532 module to communicate with the D1 over SPI, and is required for the modules to work together!
 
+To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml).  
+**The tag reader requires ESPHome 1.15.2 or later.**
 
-To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml). If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
+If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 
 ![Open Case](https://raw.githubusercontent.com/adonno/tagreader/master/docs/open-case.jpg)
 
