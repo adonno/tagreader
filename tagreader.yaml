@@ -47,7 +47,6 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: !secret ESP_API_PWD
   services:
   - service: rfidreader_tag_ok
     then:
@@ -65,7 +64,6 @@ api:
 
 # Enable OTA upgrade
 ota:
-  password: !secret ESP_OTA_PWD
 
 # Enable SPI interface
 spi:
