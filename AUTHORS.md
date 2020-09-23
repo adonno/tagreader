@@ -12,5 +12,5 @@ This list is presented in random order...
     Andrea Donno <https://github.com/adonno>
     Paulus Schoutsen <https://github.com/balloob>
     Bryson Reece <https://github.com/brysonreece>
-    Vincent Palmer <ahttps://github.com/brysonreece>
+    Vincent Palmer <https://github.com/shift>
     Magnus Øverli <https://github.com/magnusoverli>
