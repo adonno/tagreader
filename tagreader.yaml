@@ -1,119 +1,133 @@
-# Insert your SSID and Your PWD after inital setup
-wifi:
-  networks:
-#    - ssid: !secret wifi_ssid          # Uncomment this line (remove # at beginning of line) and enter your details in secrets.yaml file!
-#      password: !secret wifi_password  # Uncomment this line (remove # at beginning of line) and enter your details in secrets.yaml file!
-  ap:
-    ssid: ${devicename}
+ap:
+  ssid: ${devicename}
 
 # Enable the captive portal for inital WiFi setup
 captive_portal:
 
 substitutions:
-  devicename: tagreader
-  friendly_name: TagReader
+devicename: tagreader
+friendly_name: TagReader
 
 esphome:
-  name: $devicename
-  platform: ESP8266
-  board: d1_mini
+name: $devicename
+platform: ESP8266
+board: d1_mini
+includes:
+  - rfidreader/src/test.h
 
 # If buzzer is enabled, notify on api connection success
-  on_boot:
-    priority: -10
-    then:
-    - wait_until:
-        api.connected:
-    - logger.log: API is connected!
-    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+on_boot:
+  priority: -10
+  then:
+  - wait_until:
+      api.connected:
+  - logger.log: API is connected!
+  # - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
 
 # Define switches to control LED and buzzer from HA
 switch:
 - platform: template
-  name: "${friendly_name} Buzzer Enabled"
-  id: buzzer_enabled
-  icon: mdi:volume-high
-  optimistic: true
+name: "${friendly_name} Buzzer Enabled"
+id: buzzer_enabled
+icon: mdi:volume-high
+optimistic: true
 - platform: template
-  name: "${friendly_name} LED enabled"
-  id: led_enabled
-  icon: mdi:alarm-light-outline
-  optimistic: true
+name: "${friendly_name} LED enabled"
+id: led_enabled
+icon: mdi:alarm-light-outline
+optimistic: true
 
 # Enable logging
 logger:
-  baud_rate: 9600
+# baud_rate: 9600
 
 # Enable Home Assistant API
 api:
-  services:
-  - service: rfidreader_tag_ok
-    then:
-    - rtttl.play: "beep:d=16,o=5,b=100:b"
+services:
+- service: rfidreader_tag_ok
+  then:
+  - rtttl.play: "beep:d=16,o=5,b=100:b"
 
-  - service: rfidreader_tag_ko
-    then:
-    - rtttl.play: "beep:d=8,o=5,b=100:b"
+- service: rfidreader_tag_ko
+  then:
+  - rtttl.play: "beep:d=8,o=5,b=100:b"
 
-  - service: play_rtttl
-    variables:
-      song_str: string
-    then:
-    - rtttl.play: !lambda 'return song_str;'
+- service: play_rtttl
+  variables:
+    song_str: string
+  then:
+  - rtttl.play: !lambda 'return song_str;'
 
 # Enable OTA upgrade
 ota:
 
 # Enable SPI interface
 spi:
-  clk_pin: D0
-  miso_pin: D1
-  mosi_pin: D2
+clk_pin: D5
+miso_pin: D6
+mosi_pin: D7
 
 # Configure the PN532 module
 pn532:
-  cs_pin: D3
-  update_interval: 2s
+cs_pin: D3
+update_interval: 2s
 
-  # What happens when a tag is read
-  on_tag:
-    then:
-    - homeassistant.tag_scanned: !lambda 'return x;'
-    - if:
-        condition:
-          switch.is_on: buzzer_enabled
-        then:
-        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
-    - if:
-        condition:
-          switch.is_on: led_enabled
-        then:
-        - light.turn_on:
-            id: activity_led
-            brightness: 100%
-            red: 0%
-            green: 100%
-            blue: 0%
-            flash_length: 500ms
+# What happens when a tag is read
+on_tag:
+  then:
+  - homeassistant.event:
+      event: esphome.tag_scanned
+      data:
+        tag_id: !lambda 'return x;'
+  - if:
+      condition:
+        switch.is_on: buzzer_enabled
+      then:
+      - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+  - if:
+      condition:
+        switch.is_on: led_enabled
+      then:
+      - light.turn_on:
+          id: activity_led
+          brightness: 100%
+          red: 0%
+          green: 100%
+          blue: 0%
+          flash_length: 500ms
 
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D8
-  id: buzzer
+pin: D0
+id: buzzer
 
 # Define buzzer as output for RTTTL
 rtttl:
-  output: buzzer
+output: buzzer
 
 # Configure LED
 light:
 - platform: fastled_clockless
-  chipset: WS2812
-  pin: D7
-  default_transition_length: 10ms
-  num_leds: 1
-  rgb_order: GRB
-  id: activity_led
-  name: "${friendly_name} LED"
-  restore_mode: ALWAYS_OFF
+chipset: WS2812
+pin: D2
+default_transition_length: 10ms
+num_leds: 1
+rgb_order: GRB
+id: activity_led
+name: "${friendly_name} LED"
+restore_mode: ALWAYS_OFF
+
+text_sensor:
+
+
+
+- platform: custom
+lambda: |-
+  auto my_custom_sensor = new MyCustomTextSensor();
+  App.register_component(my_custom_sensor);
+  return {my_custom_sensor};
+
+text_sensors:
+  name: "My Custom Text Sensor"
+  # update_interval 5s
