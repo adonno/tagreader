@@ -8,9 +8,9 @@ have left someone out. For that, we're sorry! Add your name and forgive us the o
 
 This list is presented in random order...
 
-    Jesse Hills <https://github.com/jesserockz>
-    Andrea Donno <https://github.com/adonno>
-    Paulus Schoutsen <https://github.com/balloob>
-    Bryson Reece <https://github.com/brysonreece>
-    Vincent Palmer <https://github.com/shift>
-    Magnus Øverli <https://github.com/magnusoverli>
+- [Jesse Hills](https://github.com/jesserockz)
+- [Andrea Donno](https://github.com/adonno)
+- [Paulus Schoutsen](https://github.com/balloob)
+- [Bryson Reece](https://github.com/brysonreece)
+- [Vincent Palmer](https://github.com/shift)
+- [Magnus Øverli](https://github.com/magnusoverli)
