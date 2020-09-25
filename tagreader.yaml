@@ -17,8 +17,11 @@ esphome:
   name: $devicename
   platform: ESP8266
   board: d1_mini
-  includes: 
-    - rfidreader/src/test.h
+  includes:
+  - includes/ndef.h
+  libraries:
+  - https://github.com/jesserockz/NDEF.git
+  - https://github.com/jesserockz/PN532.git#esphome
 
 # If buzzer is enabled, notify on api connection success
   on_boot:
@@ -44,7 +47,6 @@ switch:
 
 # Enable logging
 logger:
-  baud_rate: 9600
 
 # Enable Home Assistant API
 api:
@@ -68,40 +70,14 @@ ota:
 
 # Enable SPI interface
 spi:
-  clk_pin: D0
-  miso_pin: D1
-  mosi_pin: D2
-
-# Configure the PN532 module
-pn532:
-  cs_pin: D3
-  update_interval: 2s
-
-  # What happens when a tag is read
-  on_tag:
-    then:
-    - homeassistant.tag_scanned: !lambda 'return x;'
-    - if:
-        condition:
-          switch.is_on: buzzer_enabled
-        then:
-        - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
-    - if:
-        condition:
-          switch.is_on: led_enabled
-        then:
-        - light.turn_on:
-            id: activity_led
-            brightness: 100%
-            red: 0%
-            green: 100%
-            blue: 0%
-            flash_length: 500ms
+  clk_pin: D5
+  miso_pin: D6
+  mosi_pin: D7
 
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D8
+  pin: D3
   id: buzzer
 
 # Define buzzer as output for RTTTL
@@ -112,19 +88,43 @@ rtttl:
 light:
 - platform: fastled_clockless
   chipset: WS2812
-  pin: D7
+  pin: D8
   default_transition_length: 10ms
   num_leds: 1
   rgb_order: GRB
   id: activity_led
   name: "${friendly_name} LED"
   restore_mode: ALWAYS_OFF
-  
+
 text_sensor:
 - platform: custom
   lambda: |-
-    auto my_custom_sensor = new MyCustomTextSensor();
-    App.register_component(my_custom_sensor);
-    return {my_custom_sensor};
+    auto ndef_tag_reader = new NDEFTagReader();
+    App.register_component(ndef_tag_reader);
+    return {ndef_tag_reader};
   text_sensors:
-    name: "My Custom Text Sensor"
+    name: "${friendly_name} Tag"
+    id: scanned_tag
+    on_value:
+      then:
+      - if:
+          condition:
+            lambda: return x != "";
+          then:
+          - homeassistant.tag_scanned: !lambda 'return x;'
+          - if:
+              condition:
+                switch.is_on: buzzer_enabled
+              then:
+              - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+          - if:
+              condition:
+                switch.is_on: led_enabled
+              then:
+              - light.turn_on:
+                  id: activity_led
+                  brightness: 100%
+                  red: 0%
+                  green: 100%
+                  blue: 0%
+                  flash_length: 500ms
