@@ -15,6 +15,7 @@ class NDEFTagReader : public Component, public TextSensor {
   void setup() override {
     this->pn532spi_ = new PN532_SPI(SPI, 0);
     this->nfc_ = new NfcAdapter(*this->pn532spi_);
+    this->nfc_->begin();
   }
 
   void loop() override {
