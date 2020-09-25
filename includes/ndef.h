@@ -1,10 +1,18 @@
 #pragma once
 
+#define tag_reader_i2c 1
+
 #include "esphome.h"
 
 #include "NfcAdapter.h"
 #include "PN532/PN532.h"
+
+#if tag_reader_i2c
+#include "PN532_I2C/PN532_I2C.h"
+#else
 #include "PN532_SPI/PN532_SPI.h"
+#endif
+
 
 static const char *TAG = "ndef_tag_reader";
 
@@ -14,8 +22,12 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
  public:
   NDEFTagReader() : PollingComponent(1000) {}
   void setup() override {
-    this->pn532spi_ = new PN532_SPI(SPI, 0);
-    this->nfc_ = new NfcAdapter(*this->pn532spi_);
+#if tag_reader_i2c
+    this->pn532_ = new PN532_I2C(Wire);
+#else
+    this->pn532_ = new PN532_SPI(SPI, 0);
+#endif
+    this->nfc_ = new NfcAdapter(*this->pn532_);
     this->nfc_->begin();
   }
 
@@ -63,6 +75,6 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
     }
   }
  protected:
-  PN532_SPI *pn532spi_;
+  PN532Interface *pn532_;
   NfcAdapter *nfc_;
 };

@@ -21,7 +21,7 @@ esphome:
   - includes/ndef.h
   libraries:
   - https://github.com/jesserockz/NDEF.git
-  - https://github.com/jesserockz/PN532.git#esphome
+  - https://github.com/jesserockz/PN532.git#esphome-i2c
 
 # If buzzer is enabled, notify on api connection success
   on_boot:
@@ -69,10 +69,7 @@ api:
 ota:
 
 # Enable SPI interface
-spi:
-  clk_pin: D5
-  miso_pin: D6
-  mosi_pin: D7
+i2c:
 
 # Define the buzzer output
 output:
