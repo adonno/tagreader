@@ -71,14 +71,14 @@ ota:
 
 # Enable SPI interface
 spi:
-  clk_pin: D0
-  miso_pin: D1
-  mosi_pin: D2
+  clk_pin: D5
+  miso_pin: D6
+  mosi_pin: D7
 
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D8
+  pin: D3
   id: buzzer
 
 # Define buzzer as output for RTTTL
@@ -89,7 +89,7 @@ rtttl:
 light:
 - platform: fastled_clockless
   chipset: WS2812
-  pin: D7
+  pin: D8
   default_transition_length: 10ms
   num_leds: 1
   rgb_order: GRB
@@ -104,6 +104,7 @@ text_sensor:
     App.register_component(ndef_tag_reader);
     return {ndef_tag_reader};
   text_sensors:
+    name: "${friendly_name} Tag"
     id: scanned_tag
     on_value:
       then:
