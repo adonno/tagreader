@@ -29,7 +29,10 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
 
     if (!tag.hasNdefMessage()) {
       ESP_LOGD(TAG, "No NDEF");
-      // TODO handle non-ndef tags by just sending the uid
+      std::string uid(tag.getUidString().c_str());
+      ESP_LOGD(TAG, "Tag UID: %s", uid.c_str());
+      this->publish_state(uid);
+      this->set_timeout("tag_clear", 1000, [this]() { this->publish_state(""); });
       return;
     }
 
