@@ -111,7 +111,7 @@ text_sensor:
           condition:
             lambda: return x != "";
           then:
-          - homeassistant.tag_scanned: lambda: 'return x;'
+          - homeassistant.tag_scanned: !lambda 'return x;'
           - if:
               condition:
                 switch.is_on: beep_sound_state
