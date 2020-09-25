@@ -47,7 +47,6 @@ switch:
 
 # Enable logging
 logger:
-  baud_rate: 9600
 
 # Enable Home Assistant API
 api:
