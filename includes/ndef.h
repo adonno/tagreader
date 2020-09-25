@@ -10,17 +10,17 @@ static const char *TAG = "ndef_tag_reader";
 
 static const std::string TAG_PREFIX = "home-assistant.io/tag/";
 
-class NDEFTagReader : public Component, public TextSensor {
+class NDEFTagReader : public PollingComponent, public TextSensor {
  public:
+  NDEFTagReader() : PollingComponent(1000) {}
   void setup() override {
     this->pn532spi_ = new PN532_SPI(SPI, 0);
     this->nfc_ = new NfcAdapter(*this->pn532spi_);
     this->nfc_->begin();
   }
 
-  void loop() override {
-    if (millis() - this->last_read_ > 2000 && this->nfc_->tagPresent()) {
-      this->last_read_ = millis();
+  void update() override {
+    if (this->nfc_->tagPresent()) {
       ESP_LOGD(TAG, "Tag Found!");
       NfcTag tag = this->nfc_->read();
 
@@ -58,5 +58,4 @@ class NDEFTagReader : public Component, public TextSensor {
  protected:
   PN532_SPI *pn532spi_;
   NfcAdapter *nfc_;
-  uint32_t last_read_{0};
 };
