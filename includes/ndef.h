@@ -46,7 +46,7 @@ class NDEFTagReader : public Component, public TextSensor {
           ESP_LOGD(TAG, "Payload: %s", payloadAsString.c_str());
           size_t pos = payloadAsString.find(TAG_PREFIX);
           if (pos != std::string::npos) {
-            this->publish_state(payloadAsString.substr(pos));
+            this->publish_state(payloadAsString.substr(pos + TAG_PREFIX.length()));
             this->set_timeout("tag_clear", 1000, [this]() { this->publish_state(""); });
           }
         }
