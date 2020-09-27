@@ -56,6 +56,10 @@ Scanned tags can be managed from the tags interface in Home Assistant. You can f
 
 ![Screenshot of the Home Assistant tag UI](https://raw.githubusercontent.com/adonno/tagreader/master/docs/tag-ui.gif)
 
-## 
+## Discord 
+
+Join our discord server: https://discord.gg/ZsfSyj
+
+##
 
 TODO
