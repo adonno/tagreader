@@ -22,6 +22,7 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
  public:
   NDEFTagReader() : PollingComponent(1000) {}
   void setup() override {
+    this->publish_state("");
 #if tag_reader_i2c
     this->pn532_ = new PN532_I2C(Wire);
 #else
@@ -32,7 +33,8 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
   }
 
   void update() override {
-    if (!this->nfc_->tagPresent()) {
+    if (!this->nfc_->tagPresent(1)) {
+      ESP_LOGD(TAG, "No Tag!");
       return;
     }
 
