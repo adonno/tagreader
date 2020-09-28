@@ -25,13 +25,13 @@ The 3D models for the case are [here](STLs).
 
 ### Connecting the components
 
-![Photo of schematics](https://github.com/adonno/tagreader/blob/master/Schematics/tag_reader_schematics_v1.png)
+![Photo of schematics](Schematics/tag_reader_schematics_v2.png)
 
 There are not too many components to connect, but it does require soldering. You will need the following:
 
 - [Solder](https://s.click.aliexpress.com/e/_dT3S62j)
 - [Soldering iron with a fairly thin tip](https://s.click.aliexpress.com/e/_dXaI6nz)
-- [About 40cm of thin wire (at least 6 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
+- [About 40cm of thin wire (at least 5 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
 
 
 Also make sure that you have set the switches on the PN532 to the following:
