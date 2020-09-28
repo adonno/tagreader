@@ -51,7 +51,6 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
     }
 
     if (!this->nfc_->tagPresent(1)) {
-      ESP_LOGD(TAG, "No Tag!");
       return;
     }
 
