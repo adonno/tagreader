@@ -74,7 +74,7 @@ i2c:
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D3
+  pin: D7
   id: buzzer
 
 # Define buzzer as output for RTTTL
