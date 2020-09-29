@@ -18,7 +18,7 @@ esphome:
   platform: ESP8266
   board: d1_mini
   includes:
-  - includes/ndef.h
+  - ndef.h
   libraries:
   - https://github.com/jesserockz/NDEF.git
   - https://github.com/jesserockz/PN532.git#esphome-i2c
