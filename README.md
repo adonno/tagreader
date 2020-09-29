@@ -63,6 +63,10 @@ Scanned tags can be managed from the tags interface in Home Assistant. You can f
 
 Join our discord server: https://discord.gg/4SDcaRS
 
+##Disclamer
+
+We use aliexpress affiliate links for the components and the tools. Some Ad-blockers might block these links an thus they seem to appear broken. You will have to temporarely disable ad-blocker to open these links. 
+
 ##
 
 TODO
