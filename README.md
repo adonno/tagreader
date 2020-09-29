@@ -8,7 +8,7 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 > I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno-crafts.myshopify.com/).
 
-![Photos of the final product](https://raw.githubusercontent.com/adonno/tagreader/master/docs/cases.jpg)
+![Photos of the final product](docs/cases.jpg)
 
 ## Building the tag reader
 
@@ -19,7 +19,7 @@ To build your own tag reader, you need the following components:
  - [WS2812](https://s.click.aliexpress.com/e/_d82GRqr)
  - [Buzzer](https://s.click.aliexpress.com/e/_dZ5F5yj)
 
-The 3D models for the case are [here](https://github.com/adonno/tagreader/tree/master/STLs).
+The 3D models for the case are [here](STLs).
 
 ### Connecting the components
 
@@ -38,12 +38,12 @@ Also make sure that you have set the switches on the PN532 to the following:
 
 This enables the PN532 module to communicate with the D1 over SPI, and is required for the modules to work together!
 
-To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](https://github.com/adonno/tagreader/blob/master/tagreader.yaml).  
+To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](tagreader.yaml).  
 **The tag reader requires ESPHome 1.15.2 or later.**
 
 If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 
-![Open Case](https://raw.githubusercontent.com/adonno/tagreader/master/docs/open-case.jpg)
+![Open Case](docs/open-case.jpg)
 
 ## Configuring for use with Home Assistant
 
@@ -57,7 +57,7 @@ The tag reader will be automatically discovered by Home Assistant once the tag r
 
 Scanned tags can be managed from the tags interface in Home Assistant. You can find it under config -> tags.
 
-![Screenshot of the Home Assistant tag UI](https://raw.githubusercontent.com/adonno/tagreader/master/docs/tag-ui.gif)
+![Screenshot of the Home Assistant tag UI](docs/tag-ui.gif)
 
 ## Discord 
 
