@@ -4,7 +4,7 @@
 
 # Tag Reader for Home Assistant
 
-The tag reader is a simple to build/use NFC tag reader, specially created for [Home Assistant](https://www.home-assistant.io). It is using a D1 mini ESP 82622 and the PN532 NFC module. The firmware is built using [ESPhome](https://www.esphome.io).
+The tag reader is a simple to build/use NFC tag reader, specially created for [Home Assistant](https://www.home-assistant.io). It is using a D1 mini ESP 8266 and the PN532 NFC module. The firmware is built using [ESPhome](https://www.esphome.io).
 
 > I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno-crafts.myshopify.com/).
 
@@ -21,7 +21,7 @@ To build your own tag reader, you need the following components:
 
 The 3D models for the case are [here](STLs).
 
-**WARNING** regarding AZdelivery D1. We have had several users contacting us with different issues, we don't recommond using these boards and won't provide support for them. 
+**WARNING** regarding AZdelivery D1. We have had several users contacting us with different issues, we don't recommend using these boards and won't provide support for them. 
 
 ### Connecting the components
 
