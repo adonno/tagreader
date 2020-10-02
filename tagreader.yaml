@@ -20,8 +20,8 @@ esphome:
   includes:
   - ndef.h
   libraries:
-  - https://github.com/jesserockz/NDEF.git
-  - https://github.com/jesserockz/PN532.git#esphome-i2c
+  - https://github.com/jesserockz/NDEF.git#25402f12
+  - https://github.com/jesserockz/PN532.git#b2201f93
 
 # If buzzer is enabled, notify on api connection success
   on_boot:
