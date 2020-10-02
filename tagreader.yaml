@@ -68,7 +68,7 @@ api:
 # Enable OTA upgrade
 ota:
 
-# Enable SPI interface
+# Enable I2C interface
 i2c:
 
 # Define the buzzer output

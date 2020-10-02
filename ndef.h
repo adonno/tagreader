@@ -37,10 +37,10 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
     this->pn532_ = new PN532_SPI(SPI, 0);
 #endif
     this->nfc_ = new NfcAdapter(*this->pn532_);
-    this->reader_setup_ = this->nfc_->begin();
+    this->reader_setup_ = this->nfc_->begin(true);
     if (!this->reader_setup_) {
       ESP_LOGE(TAG, "PN532 could not be found or setup, please check connections.");
-      this->status_set_error();
+      this->mark_failed();
       return;
     }
   }
@@ -51,6 +51,7 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
     }
 
     if (!this->nfc_->tagPresent(1)) {
+      this->nfc_->powerOff();
       return;
     }
 
@@ -95,6 +96,7 @@ class NDEFTagReader : public PollingComponent, public TextSensor {
     if (!got_url) {
       this->publish_uid(&tag);
     }
+    this->nfc_->powerOff();
   }
  protected:
 
