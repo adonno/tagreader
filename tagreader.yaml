@@ -34,11 +34,13 @@ switch:
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
+  restore_state: true
 - platform: template
   name: "${friendly_name} LED enabled"
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
+  restore_state: true
 
 # Enable logging
 logger:
@@ -101,6 +103,10 @@ output:
   pin: D8
   id: buzzer
 
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+    
 # Define buzzer as output for RTTTL
 rtttl:
   output: buzzer
