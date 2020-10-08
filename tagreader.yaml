@@ -32,12 +32,12 @@ esphome:
     - logger.log: API is connected!
     - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     - light.turn_on:
-      id: activity_led
-      brightness: 100%
-      red: 0%
-      green: 0%
-      blue: 100%
-      flash_length: 500ms
+        id: activity_led
+        brightness: 100%
+        red: 0%
+        green: 0%
+        blue: 100%
+        flash_length: 500ms
 
 # Define switches to control LED and buzzer from HA
 switch:
