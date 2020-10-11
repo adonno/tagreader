@@ -60,24 +60,98 @@ api:
     then:
     - rtttl.play: !lambda 'return song_str;'
 
+  - service: write_tag_random
+    variables:
+      continuous: bool
+    then:
+      - lambda: 'id(continous_writing_mode) = continuous;'
+      - while:
+          condition:
+            lambda: 'return id(continous_writing_mode);'
+          then:
+          - lambda: |-
+              static const char alphanum[] = "0123456789abcdef";
+              std::string uri = "https://www.home-assistant.io/tag/";
+              for (int i = 0; i < 8; i++)
+                uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+              uri += "-";
+              for (int j = 0; j < 3; j++) {
+                for (int i = 0; i < 4; i++)
+                  uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+                uri += "-";
+              }
+              for (int i = 0; i < 12; i++)
+                uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+              auto message = new nfc::NdefMessage();
+              message->add_uri_record(uri);
+              ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
+              id(pn532_board).write_mode(message);
+          - wait_until:
+              not:
+                pn532.is_writing:
+
+
+  - service: write_tag_id
+    variables:
+      tag_id: string
+    then:
+    - globals.set:
+        id: continous_writing_mode
+        value: 'false'
+    - lambda: |-
+        auto message = new nfc::NdefMessage();
+        std::string uri = "https://www.home-assistant.io/tag/";
+        uri += tag_id;
+        message->add_uri_record(uri);
+        id(pn532_board).write_mode(message);
+
+  - service: clean_tag
+    then:
+    - globals.set:
+        id: continous_writing_mode
+        value: 'false'
+    - lambda: 'id(pn532_board).clean_mode();'
+
+  - service: cancel_writing
+    then:
+    - globals.set:
+        id: continous_writing_mode
+        value: 'false'
+    - lambda: 'id(pn532_board).read_mode();'
+
 # Enable OTA upgrade
 ota:
 
-# Enable SPI interface
-spi:
-  clk_pin: D0
-  miso_pin: D1
-  mosi_pin: D2
+globals:
+- id: continous_writing_mode
+  type: bool
+  restore_value: no
+  initial_value: 'false'
 
-# Configure the PN532 module
-pn532:
-  cs_pin: D3
-  update_interval: 2s
+i2c:
+  scan: False
+  frequency: 400kHz
 
-  # What happens when a tag is read
+pn532_i2c:
+  id: pn532_board
   on_tag:
     then:
-    - homeassistant.tag_scanned: !lambda 'return x;'
+    - homeassistant.tag_scanned: !lambda |
+        if (!tag.has_ndef_message()) {
+          ESP_LOGD("tagreader", "No NDEF");
+          return x;
+        }
+        auto message = tag.get_ndef_message();
+        auto records = message->get_records();
+        for (auto &record : records) {
+          std::string payload = record->get_payload();
+          size_t pos = payload.find("https://www.home-assistant.io/tag/");
+          if (pos != std::string::npos) {
+            return payload.substr(pos + 34);
+          }
+        }
+        ESP_LOGD("tagreader", "Bad NDEF, fallback to uid");
+        return x;
     - if:
         condition:
           switch.is_on: buzzer_enabled
@@ -98,7 +172,7 @@ pn532:
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D8
+  pin: D7
   id: buzzer
 
 # Define buzzer as output for RTTTL
@@ -109,7 +183,7 @@ rtttl:
 light:
 - platform: fastled_clockless
   chipset: WS2812
-  pin: D7
+  pin: D8
   default_transition_length: 10ms
   num_leds: 1
   rgb_order: GRB
