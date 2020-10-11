@@ -35,8 +35,8 @@ There are not too many components to connect, but it does require soldering. You
 
 
 Also make sure that you have set the switches on the PN532 to the following:
-- Switch 1: Off (down)
-- Switch 2: On (up)
+- Switch 1: On (up)
+- Switch 2: Off (down)
 
 This enables the PN532 module to communicate with the D1 over SPI, and is required for the modules to work together!
 
