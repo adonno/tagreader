@@ -104,7 +104,7 @@ output:
 binary_sensor:
   - platform: status
     name: "${friendly_name} Status"
-    
+
 # Define buzzer as output for RTTTL
 rtttl:
   output: buzzer
