@@ -63,18 +63,12 @@ api:
 # Enable OTA upgrade
 ota:
 
-# Enable SPI interface
-spi:
-  clk_pin: D0
-  miso_pin: D1
-  mosi_pin: D2
+i2c:
+  scan: False
+  frequency: 400kHz
 
-# Configure the PN532 module
-pn532:
-  cs_pin: D3
-  update_interval: 2s
-
-  # What happens when a tag is read
+pn532_i2c:
+  id: pn532_board
   on_tag:
     then:
     - homeassistant.tag_scanned: !lambda 'return x;'
@@ -98,7 +92,7 @@ pn532:
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
-  pin: D8
+  pin: D7
   id: buzzer
 
 binary_sensor:
@@ -113,7 +107,7 @@ rtttl:
 light:
 - platform: fastled_clockless
   chipset: WS2812
-  pin: D7
+  pin: D8
   default_transition_length: 10ms
   num_leds: 1
   rgb_order: GRB
