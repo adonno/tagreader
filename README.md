@@ -44,7 +44,7 @@ To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yam
 > :warning: The tag reader requires the *dev* version of ESPHome until `1.16.0` is released with the `pn532_i2c` component.
 
 ~~If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).~~
-The dev version of ESPHome is availalble after you add the ESPHome addons repo (https://github.com/esphome/hassio) to the Home Assistant Supervisor
+The dev version of ESPHome is available after you add the ESPHome add-ons repository (https://github.com/esphome/hassio) to the Home Assistant Supervisor
 
 ![Open Case](docs/open-case.jpg)
 
