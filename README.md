@@ -25,25 +25,26 @@ The 3D models for the case are [here](STLs).
 
 ### Connecting the components
 
-![Photo of schematics](https://github.com/adonno/tagreader/blob/master/Schematics/tag_reader_schematics_v1.png)
+![Photo of schematics](Schematics/tag_reader_schematics_v2.png)
 
 There are not too many components to connect, but it does require soldering. You will need the following:
 
 - [Solder](https://s.click.aliexpress.com/e/_dT3S62j)
 - [Soldering iron with a fairly thin tip](https://s.click.aliexpress.com/e/_dXaI6nz)
-- [About 40cm of thin wire (at least 6 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
+- [About 40cm of thin wire (at least 5 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
 
 
 Also make sure that you have set the switches on the PN532 to the following:
-- Switch 1: Off (down)
-- Switch 2: On (up)
+- Switch 1: On (up)
+- Switch 2: Off (down)
 
-This enables the PN532 module to communicate with the D1 over SPI, and is required for the modules to work together!
+This enables the PN532 module to communicate with the D1 over I2C, and is required for the modules to work together!
 
 To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](tagreader.yaml).  
-**The tag reader requires ESPHome 1.15.2 or later.**
+> :warning: The tag reader requires the *dev* version of ESPHome until `1.16.0` is released with the `pn532_i2c` component.
 
-If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
+~~If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).~~
+The dev version of ESPHome is available after you add the ESPHome add-ons repository (https://github.com/esphome/hassio) to the Home Assistant Supervisor
 
 ![Open Case](docs/open-case.jpg)
 
