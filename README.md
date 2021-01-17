@@ -1,4 +1,4 @@
-<a href="https://www.buymeacoffee.com/SZo1yAprb" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+<a href="https://www.buymeacoffee.com/adonno" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 [![Discord](https://img.shields.io/discord/755394229944975380)](https://discord.gg/4SDcaRS)
 [![GitHub release](https://img.shields.io/github/release/adonno/tagreader.svg)](https://GitHub.com/adonno/tagreader/releases/)
 
@@ -21,7 +21,8 @@ To build your own tag reader, you need the following components:
 
 The 3D models for the case are [here](STLs).
 
-**WARNING** regarding AZdelivery D1. We have had several users contacting us with different issues, we don't recommend using these boards and won't provide support for them. 
+~~**WARNING** regarding AZdelivery D1. We have had several users contacting us with different issues, we don't recommend using these boards and won't provide support for them.~~  
+Recent reports suggesting more clones of the D1 is now working as expected. This has been verified on a AZdelivery D1.
 
 ### Connecting the components
 
