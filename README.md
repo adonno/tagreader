@@ -26,7 +26,7 @@ Recent reports suggesting more clones of the D1 is now working as expected. This
 
 ### Connecting the components
 
-![Photo of schematics](Schematics/tag_reader_schematics_v3.1.png)
+![Photo of schematics](Schematics/tag_reader_schematics_v3.2.png)
 
 There are not too many components to connect, but it does require soldering. You will need the following:
 
