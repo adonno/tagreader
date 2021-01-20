@@ -26,7 +26,7 @@ Recent reports suggesting more clones of the D1 is now working as expected. This
 
 ### Connecting the components
 
-![Photo of schematics](Schematics/tag_reader_schematics_v2.png)
+![Photo of schematics](Schematics/tag_reader_schematics_v3.2.png)
 
 There are not too many components to connect, but it does require soldering. You will need the following:
 
@@ -47,7 +47,7 @@ To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yam
 If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
 The dev version of ESPHome is available after you add the ESPHome add-ons repository (https://github.com/esphome/hassio) to the Home Assistant Supervisor or you can simply add `esphome_version: dev` to your addon config
 
-![Open Case](docs/open-case.jpg)
+![Open Case](docs/inside-case-completed.jpg)
 
 ## Configuring for use with Home Assistant
 
