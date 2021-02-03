@@ -72,43 +72,30 @@ api:
     - rtttl.play: !lambda 'return song_str;'
 
   - service: write_tag_random
-    variables:
-      continuous: bool
     then:
-      - lambda: 'id(continous_writing_mode) = continuous;'
-      - while:
-          condition:
-            lambda: 'return id(continous_writing_mode);'
-          then:
-          - lambda: |-
-              static const char alphanum[] = "0123456789abcdef";
-              std::string uri = "https://www.home-assistant.io/tag/";
-              for (int i = 0; i < 8; i++)
-                uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-              uri += "-";
-              for (int j = 0; j < 3; j++) {
-                for (int i = 0; i < 4; i++)
-                  uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-                uri += "-";
-              }
-              for (int i = 0; i < 12; i++)
-                uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-              auto message = new nfc::NdefMessage();
-              message->add_uri_record(uri);
-              ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
-              id(pn532_board).write_mode(message);
-          - wait_until:
-              not:
-                pn532.is_writing:
+    - lambda: |-
+        static const char alphanum[] = "0123456789abcdef";
+        std::string uri = "https://www.home-assistant.io/tag/";
+        for (int i = 0; i < 8; i++)
+          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+        uri += "-";
+        for (int j = 0; j < 3; j++) {
+          for (int i = 0; i < 4; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          uri += "-";
+        }
+        for (int i = 0; i < 12; i++)
+          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+        auto message = new nfc::NdefMessage();
+        message->add_uri_record(uri);
+        ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
+        id(pn532_board).write_mode(message);
 
 
   - service: write_tag_id
     variables:
       tag_id: string
     then:
-    - globals.set:
-        id: continous_writing_mode
-        value: 'false'
     - lambda: |-
         auto message = new nfc::NdefMessage();
         std::string uri = "https://www.home-assistant.io/tag/";
@@ -118,26 +105,14 @@ api:
 
   - service: clean_tag
     then:
-    - globals.set:
-        id: continous_writing_mode
-        value: 'false'
     - lambda: 'id(pn532_board).clean_mode();'
 
   - service: cancel_writing
     then:
-    - globals.set:
-        id: continous_writing_mode
-        value: 'false'
     - lambda: 'id(pn532_board).read_mode();'
 
 # Enable OTA upgrade
 ota:
-
-globals:
-- id: continous_writing_mode
-  type: bool
-  restore_value: no
-  initial_value: 'false'
 
 i2c:
   scan: False
