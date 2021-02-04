@@ -42,10 +42,9 @@ Also make sure that you have set the switches on the PN532 to the following:
 This enables the PN532 module to communicate with the D1 over I2C, and is required for the modules to work together!
 
 To flash the reader firmware to your D1 Mini you point ESPHome at [tagreader.yaml](tagreader.yaml).  
-> :warning: The tag reader requires the *dev* version of ESPHome until `1.16.0` is released with the `pn532_i2c` component.
+> :warning: The tag reader requires ESPHome `1.16.0`.
 
 If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant add-on](https://esphome.io/guides/getting_started_hassio.html).
-The dev version of ESPHome is available after you add the ESPHome add-ons repository (https://github.com/esphome/hassio) to the Home Assistant Supervisor or you can simply add `esphome_version: dev` to your addon config
 
 ![Open Case](docs/inside-case-completed.jpg)
 

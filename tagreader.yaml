@@ -41,11 +41,13 @@ switch:
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
+  restore_state: true
 - platform: template
   name: "${friendly_name} LED enabled"
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
+  restore_state: true
 
 # Enable logging
 logger:
@@ -69,6 +71,46 @@ api:
     then:
     - rtttl.play: !lambda 'return song_str;'
 
+  - service: write_tag_random
+    then:
+    - lambda: |-
+        static const char alphanum[] = "0123456789abcdef";
+        std::string uri = "https://www.home-assistant.io/tag/";
+        for (int i = 0; i < 8; i++)
+          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+        uri += "-";
+        for (int j = 0; j < 3; j++) {
+          for (int i = 0; i < 4; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          uri += "-";
+        }
+        for (int i = 0; i < 12; i++)
+          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+        auto message = new nfc::NdefMessage();
+        message->add_uri_record(uri);
+        ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
+        id(pn532_board).write_mode(message);
+
+
+  - service: write_tag_id
+    variables:
+      tag_id: string
+    then:
+    - lambda: |-
+        auto message = new nfc::NdefMessage();
+        std::string uri = "https://www.home-assistant.io/tag/";
+        uri += tag_id;
+        message->add_uri_record(uri);
+        id(pn532_board).write_mode(message);
+
+  - service: clean_tag
+    then:
+    - lambda: 'id(pn532_board).clean_mode();'
+
+  - service: cancel_writing
+    then:
+    - lambda: 'id(pn532_board).read_mode();'
+
 # Enable OTA upgrade
 ota:
 
@@ -80,7 +122,22 @@ pn532_i2c:
   id: pn532_board
   on_tag:
     then:
-    - homeassistant.tag_scanned: !lambda 'return x;'
+    - homeassistant.tag_scanned: !lambda |
+        if (!tag.has_ndef_message()) {
+          ESP_LOGD("tagreader", "No NDEF");
+          return x;
+        }
+        auto message = tag.get_ndef_message();
+        auto records = message->get_records();
+        for (auto &record : records) {
+          std::string payload = record->get_payload();
+          size_t pos = payload.find("https://www.home-assistant.io/tag/");
+          if (pos != std::string::npos) {
+            return payload.substr(pos + 34);
+          }
+        }
+        ESP_LOGD("tagreader", "Bad NDEF, fallback to uid");
+        return x;
     - if:
         condition:
           switch.is_on: buzzer_enabled
