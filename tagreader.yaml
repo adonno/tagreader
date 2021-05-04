@@ -96,16 +96,38 @@ api:
     variables:
       tag_id: string
     then:
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 100%
+        green: 0%
+        blue: 0%    
     - lambda: |-
         auto message = new nfc::NdefMessage();
         std::string uri = "https://www.home-assistant.io/tag/";
         uri += tag_id;
         message->add_uri_record(uri);
         id(pn532_board).write_mode(message);
+    - wait_until:
+        not:
+          pn532.is_writing:
+    - light.turn_off:
+        id: activity_led
 
   - service: clean_tag
     then:
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 100%
+        green: 64.7%
+        blue: 0%    
     - lambda: 'id(pn532_board).clean_mode();'
+    - wait_until:
+        not:
+          pn532.is_writing:
+    - light.turn_off:
+        id: activity_led
 
   - service: cancel_writing
     then:
