@@ -9,6 +9,8 @@ wifi:
 # Enable the captive portal for inital WiFi setup
 captive_portal:
 
+
+
 substitutions:
   devicename: tagreader
   friendly_name: TagReader
@@ -18,6 +20,15 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: adonno.tag_reader
+    version: "1.4"
 # If buzzer is enabled, notify on api connection success
   on_boot:
     priority: -10
