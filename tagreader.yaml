@@ -207,7 +207,6 @@ light:
 - platform: fastled_clockless
   chipset: WS2812
   pin: D8
-  default_transition_length: 10ms
   num_leds: 1
   rgb_order: GRB
   id: activity_led
