@@ -86,6 +86,12 @@ api:
 
   - service: write_tag_random
     then:
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 65%
+        green: 0%
+        blue: 100%    
     - lambda: |-
         static const char alphanum[] = "0123456789abcdef";
         std::string uri = "https://www.home-assistant.io/tag/";
@@ -103,7 +109,11 @@ api:
         message->add_uri_record(uri);
         ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
         id(pn532_board).write_mode(message);
-
+    - wait_until:
+        not:
+          pn532.is_writing:
+    - light.turn_off:
+        id: activity_led
 
   - service: write_tag_id
     variables:
