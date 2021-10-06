@@ -16,7 +16,7 @@ In Home Assistant you can create automations based on this tag ID. Since the mob
 The tag reader works on an USB-C connector for the newer versions or on an Micro USB for the DIY version and requires 5V 0.5A power. The tag reader will beep and flash a green led when it connects to the API.  
 
 The different availble function modes can be accessed via the services 
-tagreader_services.PNG
+![Screenshot of the tag reader modes](docs/tagreader_services.PNG)
 
 The tag reader uses it's LED to display the different modes 
 
