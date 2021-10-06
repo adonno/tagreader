@@ -8,9 +8,37 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 > I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno-crafts.myshopify.com/).
 
-![Photos of the final product](docs/cases.jpg)
+The tag reader allows to easily read 13.56 MHz tags also known as NTAG 215 and passes the Tag Id Home Assistant in the form of a alphanumeric ID i.e `XX-XX-XX-XX-XX`.
+In Home Assistant you can create automations based on this tag ID. Since the mobile companion app isn't able to read these tags as they are, we added the possibility to write either a specific or a random NDEF message on the tags with the tag reader so that they can be read by both, the reader and the companion app. The reader also allows to erease tags if necessary. 
+
+## Usage
+
+The tag reader works on an USB-C connector for the newer versions or on an Micro USB for the DIY version and requires 5V 0.5A power. The tag reader will beep and flash a green led when it connects to the API.  
+
+The different availble function modes can be accessed via the services 
+tagreader_services.PNG
+
+The tag reader uses it's LED to display the different modes 
+
+ * Read Mode  -> OFF
+ * Write Mode Custom ID -> RED
+ * Write Mode Random -> Purple
+ * Clean Mode ->  Orange
+
+On successful read of a tag the Reader buzzes and the green Led blinks 
+
+We also added the possibility to play a "fail sound". This could be used for access control with an automation that checks if the scanned Tag is authorized for a specific function an then the sound can be played. 
+
+Scanned tags can be managed from the tags interface in Home Assistant. You can find it under config -> tags.
+
+![Screenshot of the Home Assistant tag UI](docs/tag-ui.gif)
+
+
+
 
 ## Building the tag reader
+
+![Photos of the final product](docs/cases.jpg)
 
 To build your own tag reader, you need the following components:
 
@@ -48,7 +76,7 @@ If you're new to ESPHome, we recommend that you use the [ESPHome Home Assistant 
 
 ![Open Case](docs/inside-case-completed.jpg)
 
-## Configuring for use with Home Assistant
+## Configuring for use with Home Assistant 
 
 The tag reader requires [Home Assistant](https://www.home-assistant.io) 0.115 or later.
 
@@ -56,11 +84,7 @@ If the tag reader is unable to connect to a wifi network, it will start a WiFi a
 
 The tag reader will be automatically discovered by Home Assistant once the tag reader is connected to the same network. You can follow the instructions in the UI to set it up.
 
-## Usage
 
-Scanned tags can be managed from the tags interface in Home Assistant. You can find it under config -> tags.
-
-![Screenshot of the Home Assistant tag UI](docs/tag-ui.gif)
 
 ## Disclamer
 
