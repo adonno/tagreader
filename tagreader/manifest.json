@@ -1,0 +1,9 @@
+{
+  "chipFamily": "ESP8266",
+  "parts": [
+    {
+      "path": "tagreader/firmware.bin",
+      "offset": 0
+    }
+  ]
+}
