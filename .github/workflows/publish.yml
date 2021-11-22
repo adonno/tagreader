@@ -1,0 +1,15 @@
+name: Build and Publish ESPHome firmware and website
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    uses: esphome/workflows/.github/workflows/publish.yml@main
+    with:
+      files: tagreader.yaml
+      name: Tag Reader for Home Assistant
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
