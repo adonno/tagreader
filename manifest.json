@@ -1,6 +1,6 @@
 {
-  "name": "ESPHome",
-  "version": "2021.11.1",
+  "name": "Tag Reader for Home Assistant",
+  "version": "2021.11.4",
   "home_assistant_domain": "esphome",
   "new_install_skip_erase": false,
   "builds": [
