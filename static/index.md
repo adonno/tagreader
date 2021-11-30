@@ -11,7 +11,7 @@ The tag reader is a simple to build/use NFC tag reader, specially created for [H
 
 ## Installation
 
-You can use the button below to install my temp-sensor firmware directly to your device via USB from the browser.
+You can use the button below to install my firmware directly to your device via USB from the browser.
 
 <esp-web-install-button manifest="./manifest.json"></esp-web-install-button>
 
