@@ -11,5 +11,3 @@ jobs:
     with:
       files: tagreader.yaml
       name: Tag Reader for Home Assistant
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
