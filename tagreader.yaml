@@ -67,6 +67,74 @@ switch:
   optimistic: true
   restore_state: true
   entity_category: config
+  
+# Define buttons for writing tags via HA 
+button:
+  - platform: template
+    name: Write Tag Random
+    id: write_tag_random
+    # Optional variables:
+    icon: "mdi:pencil-box"
+    on_press:
+      then:
+      - light.turn_on:
+          id: activity_led
+          brightness: 100%
+          red: 100%
+          green: 0%
+          blue: 100%    
+      - lambda: |-
+          static const char alphanum[] = "0123456789abcdef";
+          std::string uri = "https://www.home-assistant.io/tag/";
+          for (int i = 0; i < 8; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          uri += "-";
+          for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 4; i++)
+              uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+            uri += "-";
+          }
+          for (int i = 0; i < 12; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          auto message = new nfc::NdefMessage();
+          message->add_uri_record(uri);
+          ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
+          id(pn532_board).write_mode(message);
+      - wait_until:
+          not:
+            pn532.is_writing:
+      - light.turn_off:
+          id: activity_led
+  - platform: template
+    name: Clean Tag
+    id: clean_tag
+    icon: "mdi:nfc-variant-off"
+    on_press:
+      then:
+      - light.turn_on:
+          id: activity_led
+          brightness: 100%
+          red: 100%
+          green: 64.7%
+          blue: 0%    
+      - lambda: 'id(pn532_board).clean_mode();'
+      - wait_until:
+          not:
+            pn532.is_writing:
+      - light.turn_off:
+          id: activity_led 
+  - platform: template
+    name: Cancel writing 
+    id: cancel_writing
+    icon: "mdi:pencil-off"
+    on_press:
+      then:
+      - lambda: 'id(pn532_board).read_mode();'
+
+
+  - platform: restart
+    name: "Living Room Restart"
+    entity_category: config
 # Enable logging
 logger:
   # level: VERY_VERBOSE
@@ -88,27 +156,6 @@ api:
       song_str: string
     then:
     - rtttl.play: !lambda 'return song_str;'
-
-  - service: write_tag_random
-    then:
-    - lambda: |-
-        static const char alphanum[] = "0123456789abcdef";
-        std::string uri = "https://www.home-assistant.io/tag/";
-        for (int i = 0; i < 8; i++)
-          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-        uri += "-";
-        for (int j = 0; j < 3; j++) {
-          for (int i = 0; i < 4; i++)
-            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-          uri += "-";
-        }
-        for (int i = 0; i < 12; i++)
-          uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
-        auto message = new nfc::NdefMessage();
-        message->add_uri_record(uri);
-        ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
-        id(pn532_board).write_mode(message);
-
 
   - service: write_tag_id
     variables:
@@ -132,24 +179,6 @@ api:
     - light.turn_off:
         id: activity_led
 
-  - service: clean_tag
-    then:
-    - light.turn_on:
-        id: activity_led
-        brightness: 100%
-        red: 100%
-        green: 64.7%
-        blue: 0%    
-    - lambda: 'id(pn532_board).clean_mode();'
-    - wait_until:
-        not:
-          pn532.is_writing:
-    - light.turn_off:
-        id: activity_led
-
-  - service: cancel_writing
-    then:
-    - lambda: 'id(pn532_board).read_mode();'
 
 # Enable OTA upgrade
 ota:
