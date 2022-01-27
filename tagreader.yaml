@@ -131,9 +131,8 @@ button:
       then:
       - lambda: 'id(pn532_board).read_mode();'
 
-
   - platform: restart
-    name: "Living Room Restart"
+    name: "${friendly_name} Restart"
     entity_category: config
 # Enable logging
 logger:
