@@ -1,6 +1,6 @@
 {
   "name": "Tag Reader for Home Assistant",
-  "version": "2021.12.1",
+  "version": "2022.1.2",
   "home_assistant_domain": "esphome",
   "new_install_skip_erase": false,
   "builds": [
@@ -8,7 +8,7 @@
       "chipFamily": "ESP8266",
       "parts": [
         {
-          "path": "tagreader/firmware.bin",
+          "path": "tagreader-esp8266/firmware.bin",
           "offset": 0
         }
       ]
