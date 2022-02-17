@@ -1,6 +1,6 @@
 {
   "name": "Tag Reader for Home Assistant",
-  "version": "2022.1.2",
+  "version": "2022.2.2",
   "home_assistant_domain": "esphome",
   "new_install_skip_erase": false,
   "builds": [
