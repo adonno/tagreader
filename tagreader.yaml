@@ -256,12 +256,12 @@ rtttl:
 
 # Configure LED
 light:
-- platform: fastled_clockless
-  chipset: WS2812
+- platform: neopixelbus
+  variant: WS2812
   pin: D8
   num_leds: 1
   flash_transition_length: 500ms
-  rgb_order: GRB
+  type: GRB
   id: activity_led
   name: "${friendly_name} LED"
   restore_mode: ALWAYS_OFF
