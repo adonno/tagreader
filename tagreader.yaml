@@ -213,6 +213,48 @@ pn532_i2c:
   id: pn532_board
   on_tag:
     then:
+
+    - if:
+        condition:
+          lambda: |
+            if (tag.has_ndef_message()) {
+              auto message = tag.get_ndef_message();
+              auto records = message->get_records();
+              for (auto &record : records) {
+                std::string payload = record->get_payload();
+                std::string type = record->get_type();
+                size_t applemusic = payload.find("https://open.spotify.com");
+                size_t spotify = payload.find("https://music.apple.com");
+                if (type == "U" and (
+                  applemusic != std::string::npos or
+                  spotify != std::string::npos
+                )) {
+                  ESP_LOGD("tagreader", "Found music tag NDEF");
+                  return true;
+                }
+              }
+            }
+            return false;
+        then:
+        - homeassistant.event:
+            event: esphome.music_tag
+            data_template:
+              reader: !lambda |
+                return App.get_name().c_str();
+              url: !lambda |
+                auto message = tag.get_ndef_message();
+                auto records = message->get_records();
+                for (auto &record : records) {
+                  std::string payload = record->get_payload();
+                  std::string type = record->get_type();
+                  size_t pos = payload.find("https://");
+                  if (type == "U" and pos != std::string::npos) {
+                    ESP_LOGD("tagreader", "Sending event music_tag");
+                    return payload;
+                  }
+                }
+                return x;
+
     - homeassistant.tag_scanned: !lambda |
         if (!tag.has_ndef_message()) {
           ESP_LOGD("tagreader", "No NDEF");
@@ -227,7 +269,7 @@ pn532_i2c:
             return payload.substr(pos + 34);
           }
         }
-        ESP_LOGD("tagreader", "Bad NDEF, fallback to uid");
+        ESP_LOGD("tagreader", "Not HA NDEF, fallback to uid");
         return x;
     - if:
         condition:
