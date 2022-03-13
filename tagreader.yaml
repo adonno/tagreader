@@ -100,11 +100,13 @@ button:
           message->add_uri_record(uri);
           ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
           id(pn532_board).write_mode(message);
+      - rtttl.play: "write:d=24,o=5,b=100:b"
       - wait_until:
           not:
             pn532.is_writing:
       - light.turn_off:
           id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
   - platform: template
     name: Clean Tag
     id: clean_tag
@@ -118,11 +120,13 @@ button:
           green: 64.7%
           blue: 0%    
       - lambda: 'id(pn532_board).clean_mode();'
+      - rtttl.play: "write:d=24,o=5,b=100:b"
       - wait_until:
           not:
             pn532.is_writing:
       - light.turn_off:
-          id: activity_led 
+          id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
   - platform: template
     name: Cancel writing 
     id: cancel_writing
@@ -130,6 +134,9 @@ button:
     on_press:
       then:
       - lambda: 'id(pn532_board).read_mode();'
+      - light.turn_off:
+          id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
 
   - platform: restart
     name: "${friendly_name} Restart"
@@ -172,15 +179,18 @@ api:
         uri += tag_id;
         message->add_uri_record(uri);
         id(pn532_board).write_mode(message);
+    - rtttl.play: "write:d=24,o=5,b=100:b"
     - wait_until:
         not:
           pn532.is_writing:
     - light.turn_off:
         id: activity_led
+    - rtttl.play: "write:d=24,o=5,b=100:b,b"
 
   - service: write_music_tag
     variables:
       music_url: string
+      music_info: string
     then:
     - light.turn_on:
         id: activity_led
@@ -191,8 +201,15 @@ api:
     - lambda: |-
         auto message = new nfc::NdefMessage();
         std::string uri = "";
+        std::string text = "";
         uri += music_url;
-        message->add_uri_record(uri);
+        text += music_info;
+        if ( music_url != "" ) {
+          message->add_uri_record(uri);
+        }
+        if ( music_info != "" ) {
+          message->add_text_record(text);
+        }
         id(pn532_board).write_mode(message);
     - rtttl.play: "write:d=24,o=5,b=100:b"
     - wait_until:
@@ -233,6 +250,8 @@ pn532_i2c:
             blue: 0%
             flash_length: 500ms
     
+    - delay: 0.15s #to fix slow component
+        
     - lambda: |-
         id(source)="";
         id(url)="";
@@ -244,39 +263,42 @@ pn532_i2c:
             std::string payload = record->get_payload();
             std::string type = record->get_type();
             size_t hass = payload.find("https://www.home-assistant.io/tag/");
-            size_t applemusic = payload.find("https://open.spotify.com");
-            size_t spotify = payload.find("https://music.apple.com");
+            size_t applemusic = payload.find("https://music.apple.com");
+            size_t spotify = payload.find("https://open.spotify.com");
             size_t sonos = payload.find("sonos-2://");
 
-            if (type == "U" and ( hass != std::string::npos ) {
+            if (type == "U" and hass != std::string::npos ) {
               ESP_LOGD("tagreader", "Found Home Assistant tag NDEF");
               id(source)="hass";
               id(url)=payload;
-              id(info)=payload.substr(pos + 34);
+              id(info)=payload.substr(hass + 34);
             }
-            else if (type == "U" and ( applemusic != std::string::npos ) {
+            else if (type == "U" and applemusic != std::string::npos ) {
               ESP_LOGD("tagreader", "Found Apple Music tag NDEF");
               id(source)="amusic";
               id(url)=payload;
             }
-            else if (type == "U" and ( spotify != std::string::npos ) {
+            else if (type == "U" and spotify != std::string::npos ) {
               ESP_LOGD("tagreader", "Found Spotify tag NDEF");
               id(source)="spotify";
               id(url)=payload;
             }
-            else if (type == "U" and ( sonos != std::string::npos ) {
+            else if (type == "U" and sonos != std::string::npos ) {
               ESP_LOGD("tagreader", "Found Sonos app tag NDEF");
               id(source)="sonos";
               id(url)=payload;
             }
-            else if (type == "T" and id(source)=="sonos" {
+            else if (type == "T" and id(source)=="sonos" ) {
               ESP_LOGD("tagreader", "Found Sonos info tag NDEF");
               id(info)=payload;
+            }
+            else {
+              id(source)="uid";
             }
           }
         }
         else {
-          id(source)="uid"
+          id(source)="uid";
         }
     
     - if:
@@ -284,12 +306,12 @@ pn532_i2c:
           lambda: 'return ( id(source)=="uid" );'
         then:
           - homeassistant.tag_scanned: !lambda |-
-              ESP_LOGD("tagreader", "No NDEF");
+              ESP_LOGD("tagreader", "No HA NDEF, using UID");
               return x;
         else:
         - if:
             condition:
-              lambda: 'return ( id(source)=="hass" )'
+              lambda: 'return ( id(source)=="hass" );'
             then:
             - homeassistant.tag_scanned: !lambda 'return id(info);'
             else:
@@ -355,4 +377,3 @@ light:
   id: activity_led
   name: "${friendly_name} LED"
   restore_mode: ALWAYS_OFF
-  
