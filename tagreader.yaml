@@ -234,76 +234,76 @@ pn532_i2c:
             flash_length: 500ms
     
     - lambda: |-
-      id(source)="";
-      id(url)="";
-      id(info)="";
-      if (tag.has_ndef_message()) {
-        auto message = tag.get_ndef_message();
-        auto records = message->get_records();
-        for (auto &record : records) {
-          std::string payload = record->get_payload();
-          std::string type = record->get_type();
-          size_t hass = payload.find("https://www.home-assistant.io/tag/");
-          size_t applemusic = payload.find("https://open.spotify.com");
-          size_t spotify = payload.find("https://music.apple.com");
-          size_t sonos = payload.find("sonos-2://");
+        id(source)="";
+        id(url)="";
+        id(info)="";
+        if (tag.has_ndef_message()) {
+          auto message = tag.get_ndef_message();
+          auto records = message->get_records();
+          for (auto &record : records) {
+            std::string payload = record->get_payload();
+            std::string type = record->get_type();
+            size_t hass = payload.find("https://www.home-assistant.io/tag/");
+            size_t applemusic = payload.find("https://open.spotify.com");
+            size_t spotify = payload.find("https://music.apple.com");
+            size_t sonos = payload.find("sonos-2://");
 
-          if (type == "U" and ( hass != std::string::npos ) {
-            ESP_LOGD("tagreader", "Found Home Assistant tag NDEF");
-            id(source)="hass";
-            id(url)=payload;
-            id(info)=payload.substr(pos + 34);
-          }
-          else if (type == "U" and ( applemusic != std::string::npos ) {
-            ESP_LOGD("tagreader", "Found Apple Music tag NDEF");
-            id(source)="amusic";
-            id(url)=payload;
-          }
-          else if (type == "U" and ( spotify != std::string::npos ) {
-            ESP_LOGD("tagreader", "Found Spotify tag NDEF");
-            id(source)="spotify";
-            id(url)=payload;
-          }
-          else if (type == "U" and ( sonos != std::string::npos ) {
-            ESP_LOGD("tagreader", "Found Sonos app tag NDEF");
-            id(source)="sonos";
-            id(url)=payload;
-          }
-          else if (type == "T" and id(source)=="sonos" {
-            ESP_LOGD("tagreader", "Found Sonos info tag NDEF");
-            id(info)=payload;
+            if (type == "U" and ( hass != std::string::npos ) {
+              ESP_LOGD("tagreader", "Found Home Assistant tag NDEF");
+              id(source)="hass";
+              id(url)=payload;
+              id(info)=payload.substr(pos + 34);
+            }
+            else if (type == "U" and ( applemusic != std::string::npos ) {
+              ESP_LOGD("tagreader", "Found Apple Music tag NDEF");
+              id(source)="amusic";
+              id(url)=payload;
+            }
+            else if (type == "U" and ( spotify != std::string::npos ) {
+              ESP_LOGD("tagreader", "Found Spotify tag NDEF");
+              id(source)="spotify";
+              id(url)=payload;
+            }
+            else if (type == "U" and ( sonos != std::string::npos ) {
+              ESP_LOGD("tagreader", "Found Sonos app tag NDEF");
+              id(source)="sonos";
+              id(url)=payload;
+            }
+            else if (type == "T" and id(source)=="sonos" {
+              ESP_LOGD("tagreader", "Found Sonos info tag NDEF");
+              id(info)=payload;
+            }
           }
         }
-      }
-      else {
-        id(source)="uid"
-      }
+        else {
+          id(source)="uid"
+        }
     
     - if:
-      condition:
-        lambda: 'return ( id(source)=="uid" );'
-      then:
-        - homeassistant.tag_scanned: !lambda |-
-          ESP_LOGD("tagreader", "No NDEF");
-          return x;
-      else:
-      - if:
         condition:
-          lambda: 'return ( id(source)=="hass" )'
+          lambda: 'return ( id(source)=="uid" );'
         then:
-        - homeassistant.tag_scanned: !lambda 'return id(info);'
+          - homeassistant.tag_scanned: !lambda |-
+              ESP_LOGD("tagreader", "No NDEF");
+              return x;
         else:
-        - homeassistant.event:
-            event: esphome.music_tag
-            data_template:
-              reader: !lambda |-
-                return App.get_name().c_str();
-              source: !lambda |-
-                return id(source);
-              url: !lambda |-
-                return id(url);
-              info: !lambda |-
-                return id(info);
+        - if:
+            condition:
+              lambda: 'return ( id(source)=="hass" )'
+            then:
+            - homeassistant.tag_scanned: !lambda 'return id(info);'
+            else:
+            - homeassistant.event:
+                event: esphome.music_tag
+                data_template:
+                  reader: !lambda |-
+                    return App.get_name().c_str();
+                  source: !lambda |-
+                    return id(source);
+                  url: !lambda |-
+                    return id(url);
+                  info: !lambda |-
+                    return id(info);
     
     - if:
         condition:
