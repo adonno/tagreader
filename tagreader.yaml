@@ -292,7 +292,7 @@ pn532_i2c:
               ESP_LOGD("tagreader", "Found Sonos info tag NDEF");
               id(info)=payload;
             }
-            else {
+            else if ( id(source)=="" ) {
               id(source)="uid";
             }
           }
