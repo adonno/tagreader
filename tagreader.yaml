@@ -333,8 +333,6 @@ pn532_i2c:
         then:
         - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     
-    - delay: 0.11s #to fix slow pn532 component
-    
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
