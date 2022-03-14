@@ -317,7 +317,7 @@ pn532_i2c:
             else:
             - homeassistant.event:
                 event: esphome.music_tag
-                data_template:
+                data:
                   reader: !lambda |-
                     return App.get_name().c_str();
                   source: !lambda |-
