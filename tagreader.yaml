@@ -288,8 +288,8 @@ pn532_i2c:
               id(source)="sonos";
               id(url)=payload;
             }
-            else if (type == "T" and id(source)=="sonos" ) {
-              ESP_LOGD("tagreader", "Found Sonos info tag NDEF");
+            else if (type == "T" ) {
+              ESP_LOGD("tagreader", "Found music info tag NDEF");
               id(info)=payload;
             }
             else if ( id(source)=="" ) {
