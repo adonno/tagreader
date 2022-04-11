@@ -1,0 +1,105 @@
+# Insert your SSID and Your PWD after inital setup
+wifi:
+# networks:
+#    - ssid: 'REPLACEME'          # Enter your WiFi SSID here. Example: `ssid: 'your_network_name'`
+#      password: 'REPLACEME'      # Enter your wifi password here. Example: `password: 'abcde123456'`
+  ap:
+    ssid: ${name}
+
+# Enable the captive portal for inital WiFi setup
+captive_portal:
+
+dashboard_import:
+  package_import_url: github://adonno/tagreader/tagread_mqtt.yaml
+  
+improv_serial:
+
+
+substitutions:
+  devicename: tagreader
+  friendly_name: TagReader
+
+esphome:
+  name: $devicename
+  platform: ESP8266
+  board: d1_mini
+
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: adonno.tag_reader_mqtt
+    version: "1.0"
+# If buzzer is enabled, notify on api connection success
+  on_boot:
+    priority: -10
+    then:
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 0%
+        green: 0%
+        blue: 100%
+        flash_length: 500ms
+
+
+# Enable logging
+logger:
+  # level: VERY_VERBOSE
+  # level: VERBOSE
+
+
+# Enable OTA upgrade
+ota:
+
+# Enable MQTT
+# Replace these values with your MQTT settings 
+mqtt:
+  broker: 192.168.178.123
+  port: 1883
+  username: TAG_USER
+  client_id: TAG_DEVICE
+  topic_prefix: TAGREADER
+
+i2c:
+  scan: False
+  frequency: 400kHz
+
+pn532_i2c:
+  id: pn532_board
+  on_tag:
+  - light.turn_on:
+      id: activity_led
+      brightness: 100%
+      red: 0%
+      green: 100%
+      blue: 0%
+      flash_length: 500ms
+  - mqtt.publish:
+          topic: pn532/tag
+          payload: !lambda 'return x;'
+ 
+# Define the buzzer output
+output:
+- platform: esp8266_pwm
+  pin: D7
+  id: buzzer
+
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+
+# Configure LED
+light:
+- platform: fastled_clockless
+  chipset: WS2812
+  pin: D8
+  num_leds: 1
+  flash_transition_length: 500ms
+  rgb_order: GRB
+  id: activity_led
+  name: "${friendly_name} LED"
+  restore_mode: ALWAYS_OFF
