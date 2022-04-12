@@ -1,0 +1,52 @@
+blueprint:
+  name: Play Music Tag
+  description: Play music tag NDEF url
+  domain: automation
+  input:
+    reader_id:
+      name: ESPHome NFC reader device
+      description: This is your NFC reader
+      selector:
+        device:
+          integration: esphome
+          manufacturer: espressif
+    player:
+      name: Media Player
+      description: This is your media player for this reader
+      selector:
+        entity:
+          domain: media_player
+
+variables:
+    device_id: !input reader_id
+    reader: '{{ device_attr(device_id, "name") }}'
+
+trigger:
+  - platform: event
+    event_type: esphome.music_tag
+condition:
+  - condition: template
+    value_template: '{{ trigger.event.data.reader == reader }}'
+action:
+  - service: media_player.media_stop
+    target:
+      entity_id: !input player
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: '{{ trigger.event.data.source == "sonos" }}'
+        sequence:
+          - service: media_player.select_source
+            data:
+              source: '{{ trigger.event.data.info }}'
+            target:
+              entity_id: !input player
+    default:
+      - service: media_player.play_media
+        data:
+          media_content_type: music
+          media_content_id: '{{ trigger.event.data.url }}'
+        target:
+          entity_id: !input player
+mode: queued
+max: 10
