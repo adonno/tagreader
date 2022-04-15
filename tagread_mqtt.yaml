@@ -4,7 +4,7 @@ wifi:
 #    - ssid: 'REPLACEME'          # Enter your WiFi SSID here. Example: `ssid: 'your_network_name'`
 #      password: 'REPLACEME'      # Enter your wifi password here. Example: `password: 'abcde123456'`
   ap:
-    ssid: ${name}
+    ssid: ${devicename}
 
 # Enable the captive portal for inital WiFi setup
 captive_portal:
