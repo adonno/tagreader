@@ -9,15 +9,23 @@ wifi:
 # Enable the captive portal for inital WiFi setup
 captive_portal:
 
+web_server:
+  port: 80
+#   auth:
+#     username: REPLACEME
+#     password: REPLACEME
+  include_internal: true
+
 dashboard_import:
   package_import_url: github://adonno/tagreader/tagreader.yaml
 
 improv_serial:
 
-
 substitutions:
   name: tagreader
   friendly_name: TagReader
+  latitude: 52.0° # <<<<<<< REPLACEME
+  longitude: 0.0° # <<<<<<< REPLACEME
 
 esphome:
   name: $name
@@ -43,7 +51,8 @@ esphome:
     - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     - light.turn_on:
         id: activity_led
-        brightness: 100%
+        brightness: !lambda |-
+          return id(led_brightness).state / 100.0;
         red: 0%
         green: 0%
         blue: 100%
@@ -79,7 +88,8 @@ button:
       then:
       - light.turn_on:
           id: activity_led
-          brightness: 100%
+          brightness: !lambda |-
+            return id(led_brightness).state / 100.0;
           red: 100%
           green: 0%
           blue: 100%    
@@ -115,7 +125,8 @@ button:
       then:
       - light.turn_on:
           id: activity_led
-          brightness: 100%
+          brightness: !lambda |-
+            return id(led_brightness).state / 100.0;
           red: 100%
           green: 64.7%
           blue: 0%    
@@ -169,7 +180,8 @@ api:
     then:
     - light.turn_on:
         id: activity_led
-        brightness: 100%
+        brightness: !lambda |-
+          return id(led_brightness).state / 100.0;
         red: 100%
         green: 0%
         blue: 0%    
@@ -194,7 +206,8 @@ api:
     then:
     - light.turn_on:
         id: activity_led
-        brightness: 100%
+        brightness: !lambda |-
+          return id(led_brightness).state / 100.0;
         red: 100%
         green: 0%
         blue: 0%    
@@ -244,7 +257,8 @@ pn532_i2c:
         then:
         - light.turn_on:
             id: activity_led
-            brightness: 100%
+            brightness: !lambda |-
+              return id(led_brightness).state / 100.0;
             red: 0%
             green: 100%
             blue: 0%
@@ -338,12 +352,29 @@ output:
 - platform: esp8266_pwm
   pin: D7
   id: buzzer
+  
+time:
+  # - platform: homeassistant
+  - platform: sntp
+    id: sntp_time
+  
+sun: # https://esphome.io/components/sun.html
+  latitude: ${latitude} # example 52.0025°
+  longitude: ${latitude} # example 5.2234°
+
+sensor:
+  - platform: sun
+    id: sun_elevation
+    internal: true
+    # name: "${friendly_name} Sun Elevation"
+    type: elevation
+    update_interval: 60s #15s
+    entity_category: diagnostic
 
 binary_sensor:
   - platform: status
     name: "${friendly_name} Status"
     entity_category: diagnostic
-
 
 text_sensor:
   - platform: version
@@ -359,6 +390,47 @@ text_sensor:
       name: "${friendly_name} Connected SSID"
       icon: mdi:wifi-strength-2
       entity_category: diagnostic
+      
+number:
+  - platform: template
+    id: led_brightness
+    internal: true
+    # optimistic: true
+    min_value: 10
+    max_value: 100
+    step: 1
+    update_interval: 60s #15s
+    lambda: |-
+      double brightnest_percent = (id(led_min_brightness).state / 100);
+      double spread = (id(led_max_brightness).state / 100) - (id(led_min_brightness).state / 100);
+      if (id(sun_elevation).state > 0) {
+        brightnest_percent += (spread * (0.1 + (id(sun_elevation).state / 100)));
+      }
+      return 100 * brightnest_percent;
+    set_action:
+      then:
+      
+  - platform: template
+    id: led_min_brightness
+    entity_category: config
+    name: "${friendly_name} LED Min Brightness"
+    optimistic: true
+    min_value: 10
+    max_value: 50
+    step: 1
+    initial_value: 35
+    restore_value: true
+    
+  - platform: template
+    id: led_max_brightness
+    entity_category: config
+    name: "${friendly_name} LED Max Brightness"
+    optimistic: true
+    min_value: 60
+    max_value: 100
+    step: 1
+    initial_value: 85
+    restore_value: true
 
 # Define buzzer as output for RTTTL
 rtttl:
