@@ -6,7 +6,7 @@
 
 The tag reader is a simple to build/use NFC tag reader, specially created for [Home Assistant](https://www.home-assistant.io). It is using a D1 mini ESP 8266 and the PN532 NFC module. The firmware is built using [ESPhome](https://www.esphome.io).
 
-> I am selling a pre-built version, a DIY version (assembly required) or just the case (use with own components). Check it out on [my website](https://adonno-crafts.myshopify.com/).
+> I am selling a pre-built version, a DIY version (assembly required), or just the case (use with own components). Check it out on [my website](https://adonno-crafts.myshopify.com/).
 
 ![Photos of the final product](docs/cases.jpg)
 
@@ -22,7 +22,7 @@ To build your own tag reader, you need the following components:
 The 3D models for the case are [here](STLs).
 
 ~~**WARNING** regarding AZdelivery D1. We have had several users contacting us with different issues, we don't recommend using these boards and won't provide support for them.~~  
-Recent reports suggesting more clones of the D1 is now working as expected. This has been verified on a AZdelivery D1.
+Recent reports suggest more clones of the D1 are now working as expected. This has been verified on an AZdelivery D1.
 
 ### Connecting the components
 
@@ -35,7 +35,7 @@ There are not too many components to connect, but it does require soldering. You
 - [About 40cm of thin wire (at least 5 different colors)](https://s.click.aliexpress.com/e/_dZvoYoB)
 
 
-Also make sure that you have set the switches on the PN532 to the following:
+Also, make sure that you have set the switches on the PN532 to the following:
 - Switch 1: On (up)
 - Switch 2: Off (down)
 
@@ -64,4 +64,4 @@ Scanned tags can be managed from the tags interface in Home Assistant. You can f
 
 ## Disclamer
 
-We use aliexpress affiliate links for the components and the tools. Some Ad-blockers might block these links an thus they seem to appear broken. You will have to temporarely disable ad-blocker to open these links. 
+We use aliexpress affiliate links for the components and the tools. Some Ad-blockers might block these links and thus they seem to appear broken. You will have to temporarily disable the ad-blocker to open these links. 
