@@ -9,7 +9,6 @@ blueprint:
       selector:
         device:
           integration: esphome
-          manufacturer: espressif
     player:
       name: Media Player
       description: This is your media player for this reader
