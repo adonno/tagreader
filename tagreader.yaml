@@ -10,7 +10,7 @@ wifi:
 captive_portal:
 
 dashboard_import:
-  package_import_url: github://cheerpipe/tagreader/tagreader.yaml
+  package_import_url: github://adonno/tagreader/tagreader.yaml
 
 improv_serial:
 
@@ -266,6 +266,7 @@ pn532_i2c:
             size_t applemusic = payload.find("https://music.apple.com");
             size_t spotify = payload.find("https://open.spotify.com");
             size_t youtube = payload.find("https://www.youtube.com/");
+            size_t youtubem = payload.find("https://music.youtube.com/");
             size_t sonos = payload.find("sonos-2://");
 
             if (type == "U" and hass != std::string::npos ) {
@@ -288,7 +289,12 @@ pn532_i2c:
               ESP_LOGD("tagreader", "Found Youtube tag NDEF");
               id(source)="youtube";
               id(url)=payload;
-            }            
+            }
+            else if (type == "U" and youtubem != std::string::npos ) {
+              ESP_LOGD("tagreader", "Found Youtube Music tag NDEF");
+              id(source)="youtube music";
+              id(url)=payload;
+            }               
             else if (type == "U" and sonos != std::string::npos ) {
               ESP_LOGD("tagreader", "Found Sonos app tag NDEF");
               id(source)="sonos";
