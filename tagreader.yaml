@@ -265,7 +265,7 @@ pn532_i2c:
             size_t hass = payload.find("https://www.home-assistant.io/tag/");
             size_t applemusic = payload.find("https://music.apple.com");
             size_t spotify = payload.find("https://open.spotify.com");
-            size_t youtube = payload.find("https://https://www.youtube.com/");
+            size_t youtube = payload.find("https://www.youtube.com/");
             size_t sonos = payload.find("sonos-2://");
 
             if (type == "U" and hass != std::string::npos ) {
