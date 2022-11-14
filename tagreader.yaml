@@ -332,7 +332,10 @@ pn532_i2c:
           switch.is_on: buzzer_enabled
         then:
         - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
-    
+  on_tag_removed:
+    then:
+    - homeassistant.event:
+        event: esphome.tag_removed
 # Define the buzzer output
 output:
 - platform: esp8266_pwm
