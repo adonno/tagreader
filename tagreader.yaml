@@ -65,7 +65,7 @@ switch:
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
-  restore_mode: RESTORE_DEFAULT_OFF
+  restore_mode: RESTORE_DEFAULT_ON
   entity_category: config
   
 # Define buttons for writing tags via HA 
