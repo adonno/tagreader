@@ -58,14 +58,14 @@ switch:
   id: buzzer_enabled
   icon: mdi:volume-high
   optimistic: true
-  restore_state: true
+  restore_mode: RESTORE_DEFAULT_ON
   entity_category: config
 - platform: template
   name: "${friendly_name} LED enabled"
   id: led_enabled
   icon: mdi:alarm-light-outline
   optimistic: true
-  restore_state: true
+  restore_mode: RESTORE_DEFAULT_ON
   entity_category: config
   
 # Define buttons for writing tags via HA 
