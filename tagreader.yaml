@@ -18,6 +18,7 @@ improv_serial:
 substitutions:
   name: tagreader
   friendly_name: TagReader
+  beep_on_boot: true
 
 esphome:
   name: $name
@@ -40,7 +41,11 @@ esphome:
     - wait_until:
         api.connected:
     - logger.log: API is connected!
-    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+    - if:
+        condition:
+          lambda: 'return ${beep_on_boot} == true;'
+        then:
+          - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
     - light.turn_on:
         id: activity_led
         brightness: 100%
