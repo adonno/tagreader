@@ -224,7 +224,7 @@ ota:
 
 i2c:
   scan: False
-  frequency: 400kHz
+  frequency: 125kHz
 
 globals:
   - id: source
