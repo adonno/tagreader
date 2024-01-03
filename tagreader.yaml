@@ -272,6 +272,7 @@ pn532_i2c:
             size_t mass_filesystem_smb = payload.find("filesystem_smb://");
             size_t mass_plex = payload.find("plex://");
             size_t mass_qobuz = payload.find("qobuz://");
+            size_t mass_radiobrowser = payload.find("radiobrowser://");
             size_t mass_soundcloud = payload.find("soundcloud://");
             size_t mass_spotify = payload.find("spotify://");
             size_t mass_tidal = payload.find("tidal://");
@@ -304,6 +305,7 @@ pn532_i2c:
                     mass_filesystem_smb != std::string::npos ||
                     mass_plex != std::string::npos ||
                     mass_qobuz != std::string::npos ||
+                    mass_radiobrowser != std::string::npos ||
                     mass_soundcloud != std::string::npos ||
                     mass_spotify != std::string::npos ||
                     mass_tidal != std::string::npos ||
