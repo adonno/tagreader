@@ -221,7 +221,7 @@ api:
 
 # Enable OTA upgrade
 ota:
-  platform: esphome
+  - platform: esphome
 
 i2c:
   scan: False
