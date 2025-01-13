@@ -18,6 +18,7 @@ improv_serial:
 substitutions:
   name: tagreader
   friendly_name: TagReader
+  gain: 100%
 
 esphome:
   name: $name
@@ -394,6 +395,7 @@ text_sensor:
 # Define buzzer as output for RTTTL
 rtttl:
   output: buzzer
+  gain: "${gain}"
 
 # Configure LED
 light:
