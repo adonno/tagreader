@@ -19,10 +19,11 @@ substitutions:
   name: tagreader
   friendly_name: TagReader
 
+esp8266:
+  board: d1_mini
+
 esphome:
   name: $name
-  platform: ESP8266
-  board: d1_mini
 
   # Automatically add the mac address to the name
   # so you can use a single firmware for all devices
