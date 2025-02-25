@@ -17,7 +17,7 @@ jobs:
       matrix:
         #### Modify below here to match your project ####
         file:
-          - tagreader.yaml
+          - tagreader
         esphome-version:
           - stable
           - beta
