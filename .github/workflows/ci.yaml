@@ -2,12 +2,34 @@ name: CI
 
 on:
   pull_request:
-
+  
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+  
 jobs:
   ci:
+    name: Building ${{ matrix.file }} / ${{ matrix.esphome-version }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        #### Modify below here to match your project ####
+        file:
+          - tagreader
+        esphome-version:
+          - stable
+          - beta
+          - dev
+        #### Modify above here to match your project ####
+
+    
     steps:
-      - uses: actions/checkout@v2
-      - uses: esphome/build-action@v1.1.0
+      - name: Checkout source code
+        uses: actions/checkout@v4.2.2
+      - name: ESPHome ${{ matrix.esphome-version }}
+        uses: esphome/build-action@v6.0.0
         with:
-          yaml_file: tagreader.yaml
+          yaml-file: ${{ matrix.file }}.yaml
+          version: ${{ matrix.esphome-version }}
