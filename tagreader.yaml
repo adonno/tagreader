@@ -72,7 +72,7 @@ switch:
 # Define buttons for writing tags via HA 
 button:
   - platform: template
-    name: Write Tag Random
+    name: "${friendly_name} Write Tag Random"
     id: write_tag_random
     # Optional variables:
     icon: "mdi:pencil-box"
@@ -109,7 +109,7 @@ button:
           id: activity_led
       - rtttl.play: "write:d=24,o=5,b=100:b,b"
   - platform: template
-    name: Clean Tag
+    name: "${friendly_name} Clean Tag"
     id: clean_tag
     icon: "mdi:nfc-variant-off"
     on_press:
@@ -129,7 +129,7 @@ button:
           id: activity_led
       - rtttl.play: "write:d=24,o=5,b=100:b,b"
   - platform: template
-    name: Cancel writing 
+    name: "${friendly_name} Cancel writing"
     id: cancel_writing
     icon: "mdi:pencil-off"
     on_press:
