@@ -13,7 +13,7 @@ jobs:
       files: |
         tagreader.yaml
       
-      esphome-version: 2024.10.3
+      esphome-version: latest
       combined-name: project-template
       #### Modify above here to match your project ####
 
