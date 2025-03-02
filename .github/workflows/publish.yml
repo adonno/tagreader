@@ -7,13 +7,13 @@ on:
 
 jobs:
   build-firmware:
-    uses: esphome/workflows/.github/workflows/publish.yml@main
+    uses: esphome/workflows/.github/workflows/build.yml@main
     name: Tag Reader for Home Assistant
     with:
       files: |
         tagreader.yaml
       
-      esphome-version: 2024.10.3
+      esphome-version: latest
       combined-name: project-template
       #### Modify above here to match your project ####
 
