@@ -6,8 +6,25 @@ on:
       - master
 
 jobs:
-  build:
+  build-firmware:
     uses: esphome/workflows/.github/workflows/publish.yml@main
+    name: Tag Reader for Home Assistant
     with:
-      files: tagreader.yaml
-      name: Tag Reader for Home Assistant
+      files: |
+        tagreader.yaml
+      
+      esphome-version: 2024.10.3
+      combined-name: project-template
+      #### Modify above here to match your project ####
+
+      release-summary: ${{ github.event.release.body }}
+      release-url: ${{ github.event.release.html_url }}
+      release-version: ${{ github.event.release.tag_name }}
+
+  upload-to-release:
+    name: Upload to Release
+    uses: esphome/workflows/.github/workflows/upload-to-gh-release.yml@2025.1.0
+    needs:
+      - build-firmware
+    with:
+      version: ${{ github.event.release.tag_name }}
