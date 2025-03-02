@@ -1,9 +1,8 @@
 name: Build and Publish ESPHome firmware and website
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
   build-firmware:
@@ -12,7 +11,7 @@ jobs:
     with:
       files: |
         tagreader.yaml
-      
+
       esphome-version: latest
       combined-name: project-template
       #### Modify above here to match your project ####
