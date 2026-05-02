@@ -1,0 +1,13 @@
+packages:
+  tagreader: !include tagreader.yaml
+  pn532: !include tagreader-pn532.yaml
+  actions: !include tagreader-actions.yaml
+
+api:
+  services: !remove write_music_tag
+  actions: !remove write_music_tag
+
+globals:
+  - id: !remove source
+  - id: !remove url
+  - id: !remove info

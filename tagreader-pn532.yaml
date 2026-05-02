@@ -1,0 +1,27 @@
+pn532_i2c:
+- id: pn532_board
+  on_tag:
+    then:
+      - homeassistant.tag_scanned: !lambda |
+          if (!tag.has_ndef_message()) {
+            return x;
+          }
+          auto message = tag.get_ndef_message();
+          auto records = message->get_records();
+          for (auto &record : records) {
+            std::string payload = record->get_payload();
+            size_t pos = payload.find("https://www.home-assistant.io/tag/");
+            if (pos != std::string::npos) {
+              return payload.substr(pos + 34);
+            }
+          }
+          return x;
+      - if:
+          condition:
+            switch.is_on: buzzer_enabled
+          then:
+          - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+  on_tag_removed:
+    then:
+      - homeassistant.event:
+          event: esphome.tag_removed

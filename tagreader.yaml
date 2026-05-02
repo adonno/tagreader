@@ -237,7 +237,7 @@ globals:
     type: std::string
 
 pn532_i2c:
-  id: pn532_board
+- id: pn532_board
   on_tag:
     then:
     - if:

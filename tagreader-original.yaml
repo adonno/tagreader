@@ -1,0 +1,267 @@
+# Insert your SSID and Your PWD after inital setup
+wifi:
+# networks:
+#    - ssid: 'REPLACEME'          # Enter your WiFi SSID here. Example: `ssid: 'your_network_name'`
+#      password: 'REPLACEME'      # Enter your wifi password here. Example: `password: 'abcde123456'`
+  ap:
+    ssid: ${name}
+
+# Enable the captive portal for inital WiFi setup
+captive_portal:
+
+dashboard_import:
+  package_import_url: github://adonno/tagreader/tagreader.yaml
+
+improv_serial:
+
+
+substitutions:
+  name: tagreader
+  friendly_name: TagReader
+
+esp8266:
+  board: d1_mini
+
+esphome:
+  name: $name
+
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: adonno.tag_reader
+    version: dev
+# If buzzer is enabled, notify on api connection success
+  on_boot:
+    priority: -10
+    then:
+    - wait_until:
+        api.connected:
+    - logger.log: API is connected!
+    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 0%
+        green: 0%
+        blue: 100%
+        flash_length: 500ms
+    - switch.turn_on: buzzer_enabled
+    - switch.turn_on: led_enabled
+
+# Define switches to control LED and buzzer from HA
+switch:
+- platform: template
+  name: "${friendly_name} Buzzer Enabled"
+  id: buzzer_enabled
+  icon: mdi:volume-high
+  optimistic: true
+  restore_mode: RESTORE_DEFAULT_ON
+  entity_category: config
+- platform: template
+  name: "${friendly_name} LED enabled"
+  id: led_enabled
+  icon: mdi:alarm-light-outline
+  optimistic: true
+  restore_mode: RESTORE_DEFAULT_ON
+  entity_category: config
+
+# Define buttons for writing tags via HA
+button:
+  - platform: template
+    name: Write Tag Random
+    id: write_tag_random
+    # Optional variables:
+    icon: "mdi:pencil-box"
+    on_press:
+      then:
+      - light.turn_on:
+          id: activity_led
+          brightness: 100%
+          red: 100%
+          green: 0%
+          blue: 100%
+      - lambda: |-
+          static const char alphanum[] = "0123456789abcdef";
+          std::string uri = "https://www.home-assistant.io/tag/";
+          for (int i = 0; i < 8; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          uri += "-";
+          for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 4; i++)
+              uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+            uri += "-";
+          }
+          for (int i = 0; i < 12; i++)
+            uri += alphanum[random_uint32() % (sizeof(alphanum) - 1)];
+          auto message = new nfc::NdefMessage();
+          message->add_uri_record(uri);
+          ESP_LOGD("tagreader", "Writing payload: %s", uri.c_str());
+          id(pn532_board).write_mode(message);
+      - rtttl.play: "write:d=24,o=5,b=100:b"
+      - wait_until:
+          not:
+            pn532.is_writing:
+      - light.turn_off:
+          id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
+  - platform: template
+    name: Clean Tag
+    id: clean_tag
+    icon: "mdi:nfc-variant-off"
+    on_press:
+      then:
+      - light.turn_on:
+          id: activity_led
+          brightness: 100%
+          red: 100%
+          green: 64.7%
+          blue: 0%
+      - lambda: 'id(pn532_board).clean_mode();'
+      - rtttl.play: "write:d=24,o=5,b=100:b"
+      - wait_until:
+          not:
+            pn532.is_writing:
+      - light.turn_off:
+          id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
+  - platform: template
+    name: Cancel writing
+    id: cancel_writing
+    icon: "mdi:pencil-off"
+    on_press:
+      then:
+      - lambda: 'id(pn532_board).read_mode();'
+      - light.turn_off:
+          id: activity_led
+      - rtttl.play: "write:d=24,o=5,b=100:b,b"
+
+  - platform: restart
+    name: "${friendly_name} Restart"
+    entity_category: config
+# Enable logging
+logger:
+  # level: VERY_VERBOSE
+  # level: VERBOSE
+
+# Enable Home Assistant API
+api:
+  actions:
+  - action: rfidreader_tag_ok
+    then:
+    - rtttl.play: "beep:d=16,o=5,b=100:b"
+
+  - action: rfidreader_tag_ko
+    then:
+    - rtttl.play: "beep:d=8,o=5,b=100:b"
+
+  - action: play_rtttl
+    variables:
+      song_str: string
+    then:
+    - rtttl.play: !lambda 'return song_str;'
+
+  - action: write_tag_id
+    variables:
+      tag_id: string
+    then:
+    - light.turn_on:
+        id: activity_led
+        brightness: 100%
+        red: 100%
+        green: 0%
+        blue: 0%
+    - lambda: |-
+        auto message = new nfc::NdefMessage();
+        std::string uri = "https://www.home-assistant.io/tag/";
+        uri += tag_id;
+        message->add_uri_record(uri);
+        id(pn532_board).write_mode(message);
+    - rtttl.play: "write:d=24,o=5,b=100:b"
+    - wait_until:
+        not:
+          pn532.is_writing:
+    - light.turn_off:
+        id: activity_led
+    - rtttl.play: "write:d=24,o=5,b=100:b,b"
+
+# Enable OTA upgrade
+ota:
+  - platform: esphome
+
+i2c:
+  scan: False
+  frequency: 400kHz
+pn532_i2c:
+- id: pn532_board
+  on_tag:
+    then:
+      - homeassistant.tag_scanned: !lambda |
+          if (!tag.has_ndef_message()) {
+            return x;
+          }
+          auto message = tag.get_ndef_message();
+          auto records = message->get_records();
+          for (auto &record : records) {
+            std::string payload = record->get_payload();
+            size_t pos = payload.find("https://www.home-assistant.io/tag/");
+            if (pos != std::string::npos) {
+              return payload.substr(pos + 34);
+            }
+          }
+          return x;
+      - if:
+          condition:
+            switch.is_on: buzzer_enabled
+          then:
+          - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+  on_tag_removed:
+    then:
+      - homeassistant.event:
+          event: esphome.tag_removed
+
+# Define the buzzer output
+output:
+- platform: esp8266_pwm
+  pin: D7
+  id: buzzer
+
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+    entity_category: diagnostic
+
+
+text_sensor:
+  - platform: version
+    hide_timestamp: true
+    name: "${friendly_name} ESPHome Version"
+    entity_category: diagnostic
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP Address"
+      icon: mdi:wifi
+      entity_category: diagnostic
+    ssid:
+      name: "${friendly_name} Connected SSID"
+      icon: mdi:wifi-strength-2
+      entity_category: diagnostic
+
+# Define buzzer as output for RTTTL
+rtttl:
+  output: buzzer
+
+# Configure LED
+light:
+- platform: neopixelbus
+  variant: WS2812
+  pin: D8
+  num_leds: 1
+  flash_transition_length: 500ms
+  type: GRB
+  id: activity_led
+  name: "${friendly_name} LED"
+  restore_mode: ALWAYS_OFF
