@@ -260,7 +260,7 @@ pn532_i2c:
         id(info)="";
         if (tag.has_ndef_message()) {
           auto message = tag.get_ndef_message();
-          auto records = message->get_records();
+          auto &records = message->get_records();
           for (auto &record : records) {
             std::string payload = record->get_payload();
             std::string type = record->get_type();
